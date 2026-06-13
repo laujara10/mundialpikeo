@@ -17,7 +17,11 @@
       "Bash(git branch *)",
       "Bash(git push *)",
       "Bash(gh auth *)",
-      "Bash(curl -s http://localhost:3000/api/stats)"
+      "Bash(curl -s http://localhost:3000/api/stats)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://mundialpikeo-production.up.railway.app)",
+      "Bash(curl -s https://mundialpikeo-production.up.railway.app/api/stats)",
+      "Bash(python3 generar.py)",
+      "Bash(pip3 install *)"
     ]
   }
 }

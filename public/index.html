@@ -3,205 +3,686 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <meta name="theme-color" content="#0E0905" />
-  <title>La Tribu Pikeo ⚽</title>
+  <meta name="theme-color" content="#f4e6c9" />
+  <title>La Tribu Pikeo ⚽ · Mundial 2026</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,800;0,900;1,800&family=Barlow:wght@400;500;600;700&display=swap');
+
+    /* ── RESET & TOKENS ─────────────────────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
     :root {
-      --negro:     #0E0905;
-      --naranja:   #d8450b;
-      --naranja-2: #ef783e;
-      --ambar:     #db8c23;
-      --crema:     #f4e6c9;
-      --crema-dim: rgba(244,230,201,0.55);
-      --verde:     #2b532e;
-      --card:      #1a1008;
-      --borde:     rgba(244,230,201,0.09);
+      --crema:      #f4e6c9;
+      --crema-2:    #ede0b8;
+      --crema-card: #fdf6e8;
+      --naranja:    #d8450b;
+      --naranja-2:  #ef783e;
+      --naranja-3:  #b83808;
+      --ambar:      #db8c23;
+      --verde:      #2b532e;
+      --verde-l:    #3d7042;
+      --cafe:       #3d2010;
+      --cafe-dim:   rgba(61,32,16,0.55);
+      --borde:      rgba(61,32,16,0.12);
+      --borde-2:    rgba(216,69,11,0.2);
+      --sombra:     0 4px 24px rgba(61,32,16,0.10);
+      --sombra-lg:  0 12px 48px rgba(216,69,11,0.18);
+      --radio:      16px;
+      --ff-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+      --ff-body:    'Barlow', system-ui, sans-serif;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--negro);
-      color: var(--crema);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      background: var(--crema);
+      color: var(--cafe);
+      font-family: var(--ff-body);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ── HERO ── */
+    /* ── UTILITARIOS ────────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
+    input[type=number] { -moz-appearance:textfield; }
+
+    /* ── BARRA SUPERIOR ─────────────────────────────────── */
+    .topbar {
+      background: var(--naranja);
+      color: var(--crema);
+      text-align: center;
+      padding: 9px 20px;
+      font-family: var(--ff-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .topbar span { opacity: .75; margin: 0 8px; }
+
+    /* ── NAV LOGO ───────────────────────────────────────── */
+    .nav {
+      padding: 20px 24px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .nav-logo .pikeo {
+      font-family: var(--ff-display);
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--naranja);
+      letter-spacing: 0.18em;
+      line-height: 1;
+    }
+
+    .nav-logo .picnic {
+      font-family: var(--ff-body);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      color: var(--ambar);
+      text-transform: uppercase;
+    }
+
+    /* ── HERO ───────────────────────────────────────────── */
     .hero {
-      position: relative;
-      padding: 44px 24px 52px;
+      padding: 36px 24px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 100% 55% at 50% 0%, rgba(216,69,11,0.2) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    .logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 32px;
       position: relative;
     }
 
-    .logo svg { width: 50px; height: 50px; }
-
-    .logo-pikeo {
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: 0.22em;
-      color: var(--naranja);
-      text-transform: uppercase;
-      line-height: 1;
+    /* Ilustración decorativa */
+    .hero-illustration {
+      position: absolute;
+      right: -20px;
+      top: 0;
+      width: 180px;
+      opacity: 0.06;
+      pointer-events: none;
     }
 
-    .logo-picnic {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.28em;
-      color: var(--ambar);
-      text-transform: uppercase;
+    .hero-illustration-left {
+      position: absolute;
+      left: -20px;
+      top: 40px;
+      width: 140px;
+      opacity: 0.04;
+      pointer-events: none;
+      transform: scaleX(-1);
     }
 
-    .badge {
+    /* Badge animado */
+    .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      background: rgba(43,83,46,0.2);
-      border: 1px solid rgba(43,83,46,0.4);
+      gap: 8px;
+      background: var(--verde);
+      color: #a8d5ab;
       border-radius: 100px;
-      padding: 6px 14px;
+      padding: 7px 18px;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #7ec882;
       margin-bottom: 24px;
+      animation: badge-pulse 3s ease-in-out infinite;
     }
 
-    .dot { width:6px; height:6px; border-radius:50%; background:#7ec882; animation: blink 2s infinite; flex-shrink:0; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes badge-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(43,83,46,0.3); }
+      50%      { box-shadow: 0 0 0 8px rgba(43,83,46,0); }
+    }
 
-    .eyebrow {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
+    .badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #6ec872;
+      animation: dot-blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes dot-blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* Eyebrow */
+    .hero-eyebrow {
+      font-family: var(--ff-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ambar);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
-    h1 {
-      font-size: clamp(38px, 11vw, 60px);
+    /* Título principal */
+    .hero-title {
+      font-family: var(--ff-display);
+      font-size: clamp(72px, 20vw, 110px);
       font-weight: 900;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
 
-    h1 .t1 { color: var(--crema); }
-    h1 .t2 { color: var(--naranja); }
+    .hero-title .line-1 { color: var(--cafe); display: block; }
+    .hero-title .line-2 {
+      color: var(--naranja);
+      display: block;
+      -webkit-text-stroke: 0px;
+      position: relative;
+    }
+
+    .hero-title .line-2::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 4px;
+      background: var(--naranja);
+      border-radius: 2px;
+      opacity: 0.3;
+    }
 
     .hero-sub {
-      font-size: 15px;
-      color: var(--crema-dim);
-      line-height: 1.65;
-      max-width: 320px;
-      margin: 0 auto 32px;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--cafe-dim);
+      line-height: 1.6;
+      max-width: 340px;
+      margin: 20px auto 0;
     }
 
-    .benefits {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
+    /* ── COUNTDOWN ──────────────────────────────────────── */
+    .countdown-wrap {
+      margin: 32px auto 0;
       width: 100%;
-      max-width: 400px;
-      margin-bottom: 32px;
-      text-align: left;
+      max-width: 440px;
+      background: var(--naranja);
+      border-radius: 20px;
+      padding: 20px 24px;
+      box-shadow: var(--sombra-lg);
+      position: relative;
+      overflow: hidden;
     }
 
-    .b {
+    .countdown-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.03) 10px,
+        rgba(255,255,255,0.03) 20px
+      );
+    }
+
+    .countdown-label {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(244,230,201,0.7);
+      text-align: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      position: relative;
+    }
+
+    .cd-block {
+      background: rgba(0,0,0,0.15);
+      border-radius: 12px;
+      padding: 12px 4px 10px;
+      text-align: center;
+    }
+
+    .cd-num {
+      font-family: var(--ff-display);
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--crema);
+      line-height: 1;
+      display: block;
+    }
+
+    .cd-unit {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(244,230,201,0.55);
+      display: block;
+      margin-top: 4px;
+    }
+
+    .cd-sep {
+      font-family: var(--ff-display);
+      font-size: 32px;
+      font-weight: 900;
+      color: rgba(244,230,201,0.35);
       display: flex;
       align-items: center;
-      gap: 11px;
-      background: rgba(244,230,201,0.04);
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 13px 15px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--crema);
+      padding-bottom: 16px;
+    }
+
+    /* ── CUPOS / PROGRESS ───────────────────────────────── */
+    .cupos-wrap {
+      margin: 20px auto 0;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .cupos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .cupos-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--cafe-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .cupos-num {
+      font-family: var(--ff-display);
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--naranja);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: rgba(61,32,16,0.1);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--ambar), var(--naranja));
+      border-radius: 100px;
+      width: 0%;
+      transition: width 1.2s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── PREMIOS ────────────────────────────────────────── */
+    .premios-section {
+      padding: 40px 24px 0;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--naranja);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-family: var(--ff-display);
+      font-size: 32px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--cafe);
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+
+    .premios-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .premio-card {
+      background: var(--crema-card);
+      border: 1.5px solid var(--borde);
+      border-radius: var(--radio);
+      padding: 18px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .premio-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--sombra-lg);
+      border-color: var(--borde-2);
+    }
+
+    .premio-card.featured {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--naranja) 0%, var(--naranja-3) 100%);
+      border-color: transparent;
+    }
+
+    .premio-card.featured .premio-icon { color: rgba(244,230,201,0.9); }
+    .premio-card.featured .premio-name { color: var(--crema); }
+    .premio-card.featured .premio-desc { color: rgba(244,230,201,0.75); }
+    .premio-card.featured .premio-tag  { background: rgba(0,0,0,0.2); color: var(--crema); }
+
+    .premio-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .premio-name {
+      font-family: var(--ff-display);
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--naranja);
+      margin-bottom: 4px;
+      line-height: 1.1;
+    }
+
+    .premio-desc {
+      font-size: 12px;
+      color: var(--cafe-dim);
+      line-height: 1.5;
+    }
+
+    .premio-tag {
+      display: inline-block;
+      margin-top: 10px;
+      background: rgba(216,69,11,0.1);
+      color: var(--naranja);
+      border-radius: 100px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Stripe decorativa en cards */
+    .premio-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--naranja);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .premio-card:not(.featured):hover::after { opacity: 1; }
+
+    /* ── CTA HERO ───────────────────────────────────────── */
+    .hero-cta-wrap {
+      margin: 32px auto 0;
+      width: 100%;
+      max-width: 440px;
+      padding: 0 24px;
     }
 
     .btn-hero {
       display: block;
       width: 100%;
-      max-width: 400px;
       background: var(--naranja);
       color: var(--crema);
-      font-size: 16px;
+      font-family: var(--ff-display);
+      font-size: 22px;
       font-weight: 900;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       border: none;
-      border-radius: 16px;
+      border-radius: 14px;
       padding: 20px 24px;
       text-decoration: none;
       text-align: center;
-      box-shadow: 0 10px 40px rgba(216,69,11,0.32);
-      transition: transform 0.12s;
+      box-shadow: 0 6px 0 var(--naranja-3), var(--sombra-lg);
+      transition: transform .12s ease, box-shadow .12s ease;
       cursor: pointer;
-      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .btn-hero:active { transform: scale(0.97); }
+    .btn-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent);
+      border-radius: 14px;
+    }
 
-    .cupos { font-size: 12px; color: rgba(244,230,201,0.3); }
-    .cupos strong { color: var(--naranja-2); }
+    .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--naranja-3), 0 16px 40px rgba(216,69,11,0.3); }
+    .btn-hero:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--naranja-3); }
 
+    .cupos-note {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--cafe-dim);
+      margin-bottom: 48px;
+    }
+    .cupos-note strong { color: var(--naranja); font-weight: 700; }
+
+    /* ── DIVISOR ────────────────────────────────────────── */
     .divider {
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(244,230,201,0.07), transparent);
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--borde), transparent);
+      margin: 0 24px;
     }
 
-    /* ── FORM ── */
+    /* ── FORM SECTION ───────────────────────────────────── */
     .form-section {
-      padding: 52px 24px 48px;
-      max-width: 480px;
+      padding: 48px 24px 52px;
+      max-width: 500px;
       margin: 0 auto;
     }
 
-    .form-header { text-align: center; margin-bottom: 28px; }
-    .form-header h2 { font-size: 24px; font-weight: 900; color: var(--crema); margin-bottom: 6px; }
-    .form-header p  { font-size: 14px; color: var(--crema-dim); }
-
-    .form-card {
-      background: var(--card);
-      border: 1px solid var(--borde);
-      border-radius: 20px;
-      padding: 26px 22px;
+    .form-header {
+      text-align: center;
+      margin-bottom: 32px;
     }
 
-    /* ── TIPO SELECTOR ── */
+    .form-header h2 {
+      font-family: var(--ff-display);
+      font-size: 44px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--naranja);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .form-header p { font-size: 15px; color: var(--cafe-dim); }
+
+    /* Progress steps */
+    .form-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-circle {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-display);
+      font-size: 15px;
+      font-weight: 800;
+      border: 2px solid var(--borde);
+      background: var(--crema-card);
+      color: var(--cafe-dim);
+      transition: all .3s ease;
+    }
+
+    .step.active   .step-circle { background: var(--naranja); border-color: var(--naranja); color: var(--crema); }
+    .step.done     .step-circle { background: var(--verde); border-color: var(--verde); color: #fff; }
+
+    .step-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cafe-dim);
+    }
+    .step.active .step-label { color: var(--naranja); }
+    .step.done   .step-label { color: var(--verde); }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--borde);
+      margin: 0 8px;
+      margin-bottom: 22px;
+      max-width: 40px;
+      transition: background .3s ease;
+    }
+    .step-line.done { background: var(--verde); }
+
+    /* ── FORM CARD ──────────────────────────────────────── */
+    .form-card {
+      background: var(--crema-card);
+      border: 1.5px solid var(--borde);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: var(--sombra);
+    }
+
+    /* Section label */
+    .f-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .f-section-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--naranja);
+      color: var(--crema);
+      font-family: var(--ff-display);
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .f-section-title {
+      font-family: var(--ff-display);
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cafe);
+    }
+
+    .f-divider { height: 1px; background: var(--borde); margin: 24px 0; }
+
+    /* Fields */
+    .field { margin-bottom: 16px; }
+
+    .field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cafe-dim);
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      background: var(--crema);
+      border: 1.5px solid var(--borde);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 16px;
+      color: var(--cafe);
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      -webkit-appearance: none;
+      appearance: none;
+      font-family: var(--ff-body);
+    }
+
+    .field input::placeholder { color: rgba(61,32,16,0.3); }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--naranja);
+      box-shadow: 0 0 0 3px rgba(216,69,11,0.12);
+    }
+
+    .field input:focus::placeholder { opacity: 0; }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233d2010' stroke-opacity='.4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 44px;
+      cursor: pointer;
+    }
+    .field select option { background: #fdf6e8; color: #3d2010; }
+
+    /* Two columns */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ── TIPO SELECTOR ──────────────────────────────────── */
     .tipo-selector {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .tipo-btn {
@@ -209,167 +690,155 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: rgba(244,230,201,0.04);
-      border: 2px solid rgba(244,230,201,0.1);
-      border-radius: 14px;
+      gap: 6px;
+      background: var(--crema);
+      border: 2px solid var(--borde);
+      border-radius: var(--radio);
       padding: 18px 12px;
       cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color .2s, background .2s, transform .15s, box-shadow .2s;
       text-align: center;
     }
 
-    .tipo-btn input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      width: 0; height: 0;
-    }
+    .tipo-btn input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
 
-    .tipo-btn .tipo-icon { font-size: 26px; }
-
-    .tipo-btn .tipo-nombre {
-      font-size: 13px;
-      font-weight: 700;
-      color: rgba(244,230,201,0.5);
-      line-height: 1.3;
-      transition: color 0.2s;
-    }
-
-    .tipo-btn .tipo-detalle {
-      font-size: 10px;
-      color: rgba(244,230,201,0.28);
-      line-height: 1.4;
-      transition: color 0.2s;
+    .tipo-btn:hover {
+      border-color: rgba(216,69,11,0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(216,69,11,0.1);
     }
 
     .tipo-btn.selected {
       border-color: var(--naranja);
-      background: rgba(216,69,11,0.1);
+      background: rgba(216,69,11,0.06);
+      box-shadow: 0 4px 20px rgba(216,69,11,0.15);
     }
 
-    .tipo-btn.selected .tipo-nombre { color: var(--crema); }
-    .tipo-btn.selected .tipo-detalle { color: rgba(244,230,201,0.55); }
+    .tipo-icon-wrap {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--borde);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      transition: background .2s;
+    }
 
-    /* Indicador de beneficio */
-    .tipo-btn .tipo-badge {
-      font-size: 9px;
+    .tipo-btn.selected .tipo-icon-wrap {
+      background: var(--naranja);
+    }
+
+    .tipo-nombre {
+      font-family: var(--ff-display);
+      font-size: 15px;
       font-weight: 800;
+      text-transform: uppercase;
+      color: var(--cafe-dim);
+      line-height: 1.2;
+      transition: color .2s;
+    }
+    .tipo-btn.selected .tipo-nombre { color: var(--naranja); }
+
+    .tipo-badge {
+      font-size: 9px;
+      font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      background: rgba(219,140,35,0.15);
+      background: rgba(219,140,35,0.12);
       color: var(--ambar);
-      border: 1px solid rgba(219,140,35,0.3);
+      border: 1px solid rgba(219,140,35,0.25);
       border-radius: 100px;
       padding: 2px 8px;
     }
 
-    /* ── SECTION LABEL ── */
-    .section-label {
+    .tipo-detalle {
       font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      border-radius: 8px;
-      display: inline-block;
+      color: rgba(61,32,16,0.4);
+      line-height: 1.4;
+    }
+
+    /* ── RESERVA FIELDS ─────────────────────────────────── */
+    .reserva-fields { display: none; }
+    .reserva-fields.visible { display: block; }
+
+    .reserva-block {
+      background: rgba(219,140,35,0.06);
+      border: 1.5px solid rgba(219,140,35,0.2);
+      border-radius: 14px;
+      padding: 18px 16px;
       margin-bottom: 16px;
     }
 
-    .sl-naranja { background: rgba(216,69,11,0.12); color: var(--naranja-2); border: 1px solid rgba(216,69,11,0.25); }
-    .sl-ambar   { background: rgba(219,140,35,0.12); color: var(--ambar);     border: 1px solid rgba(219,140,35,0.25); }
-
-    .section-divider { height: 1px; background: rgba(244,230,201,0.07); margin: 22px 0; }
-
-    /* ── FIELDS ── */
-    .field { margin-bottom: 16px; }
-
-    .field-label {
-      display: block;
-      font-size: 10.5px;
-      font-weight: 700;
+    .reserva-block-title {
+      font-family: var(--ff-display);
+      font-size: 13px;
+      font-weight: 800;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(244,230,201,0.38);
-      margin-bottom: 7px;
+      color: var(--ambar);
+      margin-bottom: 14px;
     }
 
-    .field input,
-    .field select {
-      width: 100%;
-      background: rgba(244,230,201,0.045);
-      border: 1px solid rgba(244,230,201,0.1);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 16px;
-      color: var(--crema);
-      outline: none;
-      transition: border-color 0.2s;
-      -webkit-appearance: none;
-      appearance: none;
-      font-family: inherit;
-    }
-
-    .field input::placeholder { color: rgba(244,230,201,0.2); }
-    .field input:focus,
-    .field select:focus { border-color: var(--naranja); }
-
-    .field select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23f4e6c9' stroke-opacity='.35' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-      padding-right: 40px;
-    }
-    .field select option { background: #1a1008; color: #f4e6c9; }
-
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    /* ── PARTIDO ── */
+    /* ── PARTIDO / MARCADOR ─────────────────────────────── */
     .partido-grid {
       display: grid;
-      grid-template-columns: 1fr 28px 1fr;
+      grid-template-columns: 1fr 32px 1fr;
       gap: 8px;
       align-items: end;
     }
 
-    .vs-divider {
-      font-size: 11px;
+    .vs-sep {
+      font-family: var(--ff-display);
+      font-size: 13px;
       font-weight: 800;
-      color: rgba(244,230,201,0.2);
+      color: rgba(61,32,16,0.25);
       text-align: center;
-      padding-bottom: 14px;
+      padding-bottom: 15px;
     }
 
-    .sub-hint { font-size: 10px; color: rgba(244,230,201,0.25); text-align: center; margin-top: 4px; }
+    .sub-hint { font-size: 10px; color: rgba(61,32,16,0.35); text-align:center; margin-top:5px; }
 
-    /* ── RESULTADO ── */
-    .resultado-row {
+    .marcador-box {
+      background: rgba(219,140,35,0.06);
+      border: 1.5px solid rgba(219,140,35,0.18);
+      border-radius: 14px;
+      padding: 16px 12px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       gap: 8px;
       align-items: center;
-      background: rgba(219,140,35,0.06);
-      border: 1px solid rgba(219,140,35,0.18);
-      border-radius: 14px;
-      padding: 14px;
     }
 
-    .resultado-sep { font-size: 20px; font-weight: 900; color: rgba(244,230,201,0.2); text-align: center; }
-
-    .resultado-row input {
-      background: rgba(244,230,201,0.06) !important;
-      border: 1px solid rgba(244,230,201,0.12) !important;
-      border-radius: 10px;
-      padding: 14px 10px !important;
-      font-size: 22px !important;
-      font-weight: 800 !important;
+    .marcador-sep {
+      font-family: var(--ff-display);
+      font-size: 22px;
+      font-weight: 900;
+      color: rgba(61,32,16,0.2);
       text-align: center;
     }
-    .resultado-row input:focus { border-color: var(--ambar) !important; }
 
-    .equipo-name {
-      font-size: 11px;
-      color: rgba(244,230,201,0.3);
+    .marcador-box input {
+      background: var(--crema) !important;
+      border: 1.5px solid var(--borde) !important;
+      border-radius: 10px !important;
+      padding: 14px 8px !important;
+      font-family: var(--ff-display) !important;
+      font-size: 28px !important;
+      font-weight: 900 !important;
+      text-align: center !important;
+      color: var(--naranja) !important;
+    }
+
+    .marcador-box input:focus {
+      border-color: var(--ambar) !important;
+      box-shadow: 0 0 0 3px rgba(219,140,35,0.12) !important;
+    }
+
+    .equipo-name-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(61,32,16,0.35);
       text-align: center;
       margin-top: 5px;
       white-space: nowrap;
@@ -377,93 +846,103 @@
       text-overflow: ellipsis;
     }
 
-    /* Ocultar flechas inputs numéricos */
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-    input[type=number] { -moz-appearance: textfield; }
-
-    /* ── CHECKBOX ── */
+    /* ── CHECKBOX ───────────────────────────────────────── */
     .check-field {
       display: flex;
-      gap: 11px;
+      gap: 12px;
       align-items: flex-start;
-      background: rgba(43,83,46,0.1);
-      border: 1px solid rgba(43,83,46,0.3);
+      background: rgba(43,83,46,0.06);
+      border: 1.5px solid rgba(43,83,46,0.2);
       border-radius: 12px;
       padding: 14px;
       cursor: pointer;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
+      transition: border-color .2s, background .2s;
+    }
+
+    .check-field:hover {
+      border-color: rgba(43,83,46,0.4);
+      background: rgba(43,83,46,0.09);
     }
 
     .check-field input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       flex-shrink: 0;
-      accent-color: #5aaf5e;
+      accent-color: var(--verde);
       margin-top: 2px;
       cursor: pointer;
     }
 
-    .check-field span { font-size: 13px; color: rgba(244,230,201,0.72); line-height: 1.55; }
+    .check-field span { font-size: 13px; color: rgba(61,32,16,0.7); line-height: 1.55; }
 
-    /* ── ERROR ── */
+    /* ── ERROR ──────────────────────────────────────────── */
     .error-msg {
       display: none;
-      background: rgba(216,69,11,0.1);
-      border: 1px solid rgba(216,69,11,0.3);
+      background: rgba(216,69,11,0.08);
+      border: 1.5px solid rgba(216,69,11,0.3);
       border-radius: 10px;
       padding: 12px 16px;
       font-size: 13px;
-      color: var(--naranja-2);
+      color: var(--naranja-3);
       margin-bottom: 16px;
       text-align: center;
       line-height: 1.5;
     }
     .error-msg.show { display: block; }
 
-    /* ── SUBMIT ── */
+    /* ── BTN SUBMIT ─────────────────────────────────────── */
     .btn-submit {
       width: 100%;
       background: var(--naranja);
       color: var(--crema);
-      font-size: 15px;
+      font-family: var(--ff-display);
+      font-size: 22px;
       font-weight: 900;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       border: none;
       border-radius: 14px;
-      padding: 19px 24px;
+      padding: 20px 24px;
       cursor: pointer;
-      box-shadow: 0 8px 36px rgba(216,69,11,0.3);
-      transition: transform 0.12s, background 0.12s, opacity 0.15s;
-      font-family: inherit;
+      box-shadow: 0 6px 0 var(--naranja-3), 0 12px 32px rgba(216,69,11,0.2);
+      transition: transform .12s, box-shadow .12s, opacity .15s;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-submit:hover  { background: #c23a08; }
-    .btn-submit:active { transform: scale(0.97); }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+    }
+
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--naranja-3), 0 16px 40px rgba(216,69,11,0.28); }
+    .btn-submit:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--naranja-3); }
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
     .form-legal {
       text-align: center;
       font-size: 11px;
-      color: rgba(244,230,201,0.2);
+      color: rgba(61,32,16,0.35);
       margin-top: 14px;
       line-height: 1.55;
     }
 
-    /* ── SPINNER ── */
+    /* Spinner */
     .spinner {
       display: inline-block;
       width: 16px; height: 16px;
-      border: 2px solid rgba(244,230,201,0.25);
+      border: 2px solid rgba(244,230,201,0.35);
       border-top-color: var(--crema);
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin .7s linear infinite;
       vertical-align: middle;
       margin-right: 8px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── SUCCESS ── */
+    /* ── SUCCESS SCREENS ────────────────────────────────── */
     .success-screen {
       display: none;
       min-height: 100svh;
@@ -472,131 +951,116 @@
       justify-content: center;
       padding: 48px 24px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
+      background: var(--crema);
     }
-
-    .success-screen::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 80% 50% at 50% 10%, rgba(43,83,46,0.22) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
     .success-screen.show { display: flex; }
 
-    .success-check {
-      width: 76px; height: 76px;
+    .success-icon {
+      width: 88px; height: 88px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      font-size: 36px;
       margin-bottom: 24px;
-      position: relative;
-      z-index: 1;
     }
 
-    .check-reserva { background: var(--naranja); box-shadow: 0 8px 40px rgba(216,69,11,0.4); }
-    .check-walkIn  { background: var(--verde);   box-shadow: 0 8px 40px rgba(43,83,46,0.45); }
+    .si-reserva {
+      background: var(--naranja);
+      box-shadow: 0 0 0 12px rgba(216,69,11,0.1), 0 8px 32px rgba(216,69,11,0.3);
+    }
+
+    .si-walkin {
+      background: var(--verde);
+      box-shadow: 0 0 0 12px rgba(43,83,46,0.1), 0 8px 32px rgba(43,83,46,0.3);
+    }
 
     .success-screen h2 {
-      font-size: 26px;
+      font-family: var(--ff-display);
+      font-size: 40px;
       font-weight: 900;
-      line-height: 1.2;
-      color: var(--crema);
+      text-transform: uppercase;
+      color: var(--cafe);
+      line-height: 1.1;
       margin-bottom: 10px;
       max-width: 360px;
-      position: relative;
-      z-index: 1;
     }
 
     .success-screen h2 em { font-style: normal; color: var(--naranja); }
 
-    .success-msg {
+    .success-screen p {
       font-size: 15px;
-      color: var(--crema-dim);
+      color: var(--cafe-dim);
       line-height: 1.65;
       max-width: 340px;
       margin-bottom: 28px;
-      position: relative;
-      z-index: 1;
+    }
+
+    .cortesia-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--naranja);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 14px;
+      color: var(--crema);
+      font-weight: 700;
+      max-width: 400px;
+      width: 100%;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 0 var(--naranja-3), var(--sombra-lg);
+      line-height: 1.4;
     }
 
     .success-card {
-      background: var(--card);
-      border: 1px solid var(--borde);
+      background: var(--crema-card);
+      border: 1.5px solid var(--borde);
       border-radius: 18px;
       padding: 20px;
       max-width: 400px;
       width: 100%;
       margin-bottom: 20px;
       text-align: left;
-      position: relative;
-      z-index: 1;
+      box-shadow: var(--sombra);
     }
 
-    .si {
+    .si-row {
       display: flex;
-      gap: 11px;
+      gap: 12px;
       align-items: flex-start;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(244,230,201,0.05);
+      padding: 11px 0;
+      border-bottom: 1px solid var(--borde);
       font-size: 14px;
       line-height: 1.5;
-      color: rgba(244,230,201,0.82);
+      color: rgba(61,32,16,0.82);
     }
-    .si:last-child { border-bottom: none; }
-    .si-i { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
-
-    /* Pill de cortesía */
-    .cortesia-pill {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(216,69,11,0.1);
-      border: 1px solid rgba(216,69,11,0.3);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 14px;
-      color: var(--naranja-2);
-      font-weight: 700;
-      max-width: 400px;
-      width: 100%;
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
-    }
+    .si-row:last-child { border-bottom: none; }
+    .si-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 
     .btn-otra {
       background: transparent;
-      border: 1px solid rgba(244,230,201,0.15);
+      border: 1.5px solid var(--borde);
       border-radius: 12px;
-      color: rgba(244,230,201,0.4);
-      font-size: 13px;
+      color: var(--cafe-dim);
+      font-size: 14px;
       font-weight: 600;
-      padding: 12px 24px;
+      padding: 12px 28px;
       cursor: pointer;
       margin-bottom: 24px;
-      font-family: inherit;
-      transition: color 0.2s, border-color 0.2s;
-      position: relative;
-      z-index: 1;
+      font-family: var(--ff-body);
+      transition: color .2s, border-color .2s;
     }
-    .btn-otra:hover { color: var(--crema); border-color: rgba(244,230,201,0.3); }
+    .btn-otra:hover { color: var(--cafe); border-color: rgba(61,32,16,0.3); }
 
+    /* ── FOOTER ─────────────────────────────────────────── */
     .footer {
       text-align: center;
       padding: 28px 24px;
       font-size: 11px;
-      color: rgba(244,230,201,0.15);
-      letter-spacing: 0.03em;
+      color: rgba(61,32,16,0.3);
+      letter-spacing: 0.04em;
     }
-
-    /* Campos ocultos/visibles */
-    .reserva-fields { display: none; }
-    .reserva-fields.visible { display: block; }
   </style>
 </head>
 <body>
@@ -604,160 +1068,244 @@
 <!-- ════════ LANDING ════════════════════════════════════ -->
 <div id="landing">
 
+  <!-- Top bar -->
+  <div class="topbar">
+    ⚽ Mundial 2026 <span>·</span> La Tribu Pikeo <span>·</span> Cupos Limitados
+  </div>
+
+  <!-- Nav -->
+  <nav class="nav fade-in">
+    <div class="nav-logo">
+      <span class="pikeo">PIKEO</span>
+      <span class="picnic">◆ PICNIC ◆</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
   <section class="hero">
-    <div class="logo">
-      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="28" y="30" width="4" height="22" rx="2" fill="#d8450b"/>
-        <ellipse cx="30" cy="14" rx="3" ry="15" transform="rotate(-28 30 14)" fill="#d8450b" opacity=".9"/>
-        <ellipse cx="30" cy="14" rx="3" ry="15" transform="rotate(28 30 14)"  fill="#d8450b" opacity=".9"/>
-        <ellipse cx="30" cy="11" rx="3" ry="13" transform="rotate(-58 30 11)" fill="#d8450b" opacity=".8"/>
-        <ellipse cx="30" cy="11" rx="3" ry="13" transform="rotate(58 30 11)"  fill="#d8450b" opacity=".8"/>
-        <ellipse cx="30" cy="9"  rx="2.5" ry="11" transform="rotate(-90 30 9)" fill="#d8450b" opacity=".7"/>
-        <ellipse cx="30" cy="9"  rx="2.5" ry="12" transform="rotate(-10 30 9)" fill="#d8450b"/>
-      </svg>
-      <span class="logo-pikeo">PIKEO</span>
-      <span class="logo-picnic">◆ PICNIC ◆</span>
+    <div class="hero-badge fade-in">
+      <span class="badge-dot"></span>
+      Mundial 2026 · Cupos disponibles
     </div>
 
-    <div class="badge"><span class="dot"></span>Mundial 2026 · Cupos disponibles</div>
+    <p class="hero-eyebrow fade-in">No todos ven el partido. Algunos lo viven.</p>
 
-    <p class="eyebrow">No todos ven el partido. Algunos lo viven.</p>
-
-    <h1>
-      <span class="t1">LA TRIBU</span><br>
-      <span class="t2">PIKEO ⚽</span>
+    <h1 class="hero-title fade-in">
+      <span class="line-1">La Tribu</span>
+      <span class="line-2">Pikeo</span>
     </h1>
 
-    <p class="hero-sub">
-      Reserva tu mesa o participa desde el sitio. Deja tu pronóstico y gana premios durante todo el torneo.
+    <p class="hero-sub fade-in">
+      Reserva tu mesa, deja tu pronóstico y participa por premios durante todo el torneo.
     </p>
 
-    <div class="benefits">
-      <div class="b">🥂&nbsp; Cortesía de bienvenida para quienes reservan</div>
-      <div class="b">🏆&nbsp; Premios para todos los que acierten el marcador</div>
-      <div class="b">🎯&nbsp; Sorteo final del Mundial para todos</div>
-      <div class="b">⏳&nbsp; Cupos limitados por partido</div>
+    <!-- Countdown -->
+    <div class="countdown-wrap fade-in">
+      <p class="countdown-label">⏱ Próximo partido en</p>
+      <div class="countdown-grid">
+        <div class="cd-block"><span class="cd-num" id="cd-d">00</span><span class="cd-unit">días</span></div>
+        <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-unit">horas</span></div>
+        <div class="cd-block"><span class="cd-num" id="cd-m">00</span><span class="cd-unit">min</span></div>
+        <div class="cd-block"><span class="cd-num" id="cd-s">00</span><span class="cd-unit">seg</span></div>
+      </div>
     </div>
 
-    <a href="#formulario" class="btn-hero">QUIERO PARTICIPAR</a>
-    <p class="cupos"><strong>⚡ Cupos limitados</strong> · Regístrate ahora</p>
+    <!-- Cupos progress -->
+    <div class="cupos-wrap fade-in">
+      <div class="cupos-header">
+        <span class="cupos-label">⚡ Cupos tomados</span>
+        <span class="cupos-num" id="cupos-txt">Cargando...</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
   </section>
+
+  <!-- Premios -->
+  <section class="premios-section fade-in">
+    <p class="section-eyebrow">Lo que puedes ganar</p>
+    <h2 class="section-title">Premios del torneo</h2>
+
+    <div class="premios-grid">
+      <div class="premio-card featured">
+        <span class="premio-icon">🥂</span>
+        <div class="premio-name">Cortesía de bienvenida</div>
+        <div class="premio-desc">Para todos los que reservan mesa con anticipación.</div>
+        <span class="premio-tag">Solo al reservar</span>
+      </div>
+
+      <div class="premio-card">
+        <span class="premio-icon">🏆</span>
+        <div class="premio-name">Premio marcador</div>
+        <div class="premio-desc">Si aciertas el resultado exacto del partido.</div>
+        <span class="premio-tag">Para todos</span>
+      </div>
+
+      <div class="premio-card">
+        <span class="premio-icon">🎰</span>
+        <div class="premio-name">Sorteo final</div>
+        <div class="premio-desc">Premio mayor al final del Mundial.</div>
+        <span class="premio-tag">Para todos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="hero-cta-wrap fade-in">
+    <a href="#formulario" class="btn-hero">RESERVAR Y PARTICIPAR →</a>
+    <p class="cupos-note"><strong>Cupos limitados por partido</strong> · No pierdas el tuyo</p>
+  </div>
 
   <div class="divider"></div>
 
-  <!-- ════ FORMULARIO ════ -->
+  <!-- ══ FORMULARIO ══════════════════════════════════════ -->
   <section class="form-section" id="formulario">
 
-    <div class="form-header">
-      <h2>Únete a La Tribu ⚽</h2>
-      <p>Elige cómo participas hoy</p>
+    <div class="form-header fade-in">
+      <h2>Únete ahora</h2>
+      <p>Elige cómo participas y deja tu pronóstico</p>
     </div>
 
-    <div class="form-card">
+    <!-- Paso a paso visual -->
+    <div class="form-steps fade-in" id="formSteps">
+      <div class="step active" id="step1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Tipo</div>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step" id="step2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Datos</div>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step" id="step3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Pronóstico</div>
+      </div>
+      <div class="step-line" id="line3"></div>
+      <div class="step" id="step4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Listo</div>
+      </div>
+    </div>
+
+    <div class="form-card fade-in">
 
       <div id="errorMsg" class="error-msg"></div>
 
-      <!-- ── TIPO DE PARTICIPANTE ── -->
-      <div class="tipo-selector">
+      <!-- TIPO -->
+      <div class="f-section">
+        <div class="f-section-num">1</div>
+        <div class="f-section-title">¿Cómo participas?</div>
+      </div>
 
+      <div class="tipo-selector">
         <label class="tipo-btn" id="btnReserva" onclick="seleccionarTipo('reserva')">
           <input type="radio" name="tipo" value="reserva" />
-          <span class="tipo-icon">🪑</span>
-          <span class="tipo-nombre">Quiero reservar mi mesa</span>
+          <div class="tipo-icon-wrap">🪑</div>
+          <span class="tipo-nombre">Reservar mesa</span>
           <span class="tipo-badge">🥂 Cortesía incluida</span>
           <span class="tipo-detalle">Aún no estoy en Pikeo</span>
         </label>
 
         <label class="tipo-btn" id="btnWalkIn" onclick="seleccionarTipo('walkin')">
           <input type="radio" name="tipo" value="walkin" />
-          <span class="tipo-icon">⚽</span>
-          <span class="tipo-nombre">Ya estoy en Pikeo</span>
+          <div class="tipo-icon-wrap">⚽</div>
+          <span class="tipo-nombre">Ya estoy aquí</span>
           <span class="tipo-badge">🏆 Participo igual</span>
-          <span class="tipo-detalle">Solo quiero dejar mi pronóstico</span>
+          <span class="tipo-detalle">Solo quiero el pronóstico</span>
         </label>
-
       </div>
 
-      <!-- ── DATOS PERSONALES ── -->
-      <span class="section-label sl-naranja">👤 Tus datos</span>
+      <div class="f-divider"></div>
+
+      <!-- DATOS -->
+      <div class="f-section">
+        <div class="f-section-num">2</div>
+        <div class="f-section-title">Tus datos</div>
+      </div>
 
       <div class="field">
         <label class="field-label">Nombre completo *</label>
-        <input type="text" id="nombre" placeholder="¿Cómo te llamamos?" autocomplete="given-name" />
+        <input type="text" id="nombre" placeholder="¿Cómo te llamamos?" autocomplete="given-name" oninput="actualizarSteps()" />
       </div>
 
       <div class="field">
         <label class="field-label">WhatsApp *</label>
-        <input type="tel" id="whatsapp" placeholder="+57 300 000 0000" inputmode="tel" autocomplete="tel" />
+        <input type="tel" id="whatsapp" placeholder="+57 300 000 0000" inputmode="tel" autocomplete="tel" oninput="actualizarSteps()" />
       </div>
 
-      <!-- ── RESERVA (solo si eligió mesa) ── -->
+      <!-- RESERVA condicional -->
       <div id="reservaFields" class="reserva-fields">
-        <div class="section-divider"></div>
-        <span class="section-label sl-naranja">🪑 Tu reserva</span>
-
-        <div class="two-col">
-          <div class="field">
-            <label class="field-label">Fecha *</label>
-            <input type="date" id="fechaReserva" />
+        <div class="reserva-block">
+          <div class="reserva-block-title">🗓 Datos de tu reserva</div>
+          <div class="two-col">
+            <div class="field">
+              <label class="field-label">Fecha *</label>
+              <input type="date" id="fechaReserva" />
+            </div>
+            <div class="field">
+              <label class="field-label">Hora *</label>
+              <input type="time" id="horaReserva" />
+            </div>
           </div>
           <div class="field">
-            <label class="field-label">Hora *</label>
-            <input type="time" id="horaReserva" />
+            <label class="field-label">Número de personas *</label>
+            <select id="personas">
+              <option value="">¿Cuántos vienen?</option>
+              <option value="1">1 persona</option>
+              <option value="2">2 personas</option>
+              <option value="3">3 personas</option>
+              <option value="4">4 personas</option>
+              <option value="5">5 personas</option>
+              <option value="6">6 personas</option>
+              <option value="7">7 personas</option>
+              <option value="8">8 o más personas</option>
+            </select>
           </div>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Número de personas *</label>
-          <select id="personas">
-            <option value="">¿Cuántos vienen?</option>
-            <option value="1">1 persona</option>
-            <option value="2">2 personas</option>
-            <option value="3">3 personas</option>
-            <option value="4">4 personas</option>
-            <option value="5">5 personas</option>
-            <option value="6">6 personas</option>
-            <option value="7">7 personas</option>
-            <option value="8">8 o más personas</option>
-          </select>
         </div>
       </div>
 
-      <!-- ── PRONÓSTICO ── -->
-      <div class="section-divider"></div>
-      <span class="section-label sl-ambar">🎯 Tu pronóstico</span>
+      <div class="f-divider"></div>
+
+      <!-- PRONÓSTICO -->
+      <div class="f-section">
+        <div class="f-section-num">3</div>
+        <div class="f-section-title">Tu pronóstico</div>
+      </div>
 
       <div class="field">
-        <label class="field-label">Partido *</label>
+        <label class="field-label">¿Qué partido verás? *</label>
         <div class="partido-grid">
           <div>
-            <input type="text" id="equipoA" placeholder="Ej: Colombia" />
-            <p class="sub-hint">Equipo A</p>
+            <input type="text" id="equipoA" placeholder="Colombia" oninput="actualizarMarcador()" />
+            <p class="sub-hint">Equipo A (local)</p>
           </div>
-          <div class="vs-divider">VS</div>
+          <div class="vs-sep">VS</div>
           <div>
-            <input type="text" id="equipoB" placeholder="Ej: Brasil" />
-            <p class="sub-hint">Equipo B</p>
+            <input type="text" id="equipoB" placeholder="Brasil" oninput="actualizarMarcador()" />
+            <p class="sub-hint">Equipo B (visita)</p>
           </div>
         </div>
       </div>
 
       <div class="field">
         <label class="field-label">Resultado que pronosticas *</label>
-        <div class="resultado-row">
+        <div class="marcador-box">
           <div>
-            <input type="number" id="golA" style="text-align:center" placeholder="0" min="0" max="20" inputmode="numeric" />
-            <p class="equipo-name" id="labelA">Equipo A</p>
+            <input type="number" id="golA" placeholder="0" min="0" max="20" inputmode="numeric" oninput="actualizarSteps()" />
+            <p class="equipo-name-label" id="labelA">Equipo A</p>
           </div>
-          <div class="resultado-sep">—</div>
+          <div class="marcador-sep">—</div>
           <div>
-            <input type="number" id="golB" style="text-align:center" placeholder="0" min="0" max="20" inputmode="numeric" />
-            <p class="equipo-name" id="labelB">Equipo B</p>
+            <input type="number" id="golB" placeholder="0" min="0" max="20" inputmode="numeric" oninput="actualizarSteps()" />
+            <p class="equipo-name-label" id="labelB">Equipo B</p>
           </div>
         </div>
       </div>
 
-      <div class="section-divider"></div>
+      <div class="f-divider"></div>
 
       <label class="check-field">
         <input type="checkbox" id="comunicaciones" />
@@ -765,7 +1313,7 @@
       </label>
 
       <button class="btn-submit" id="btnSubmit" onclick="enviar()">
-        REGISTRARME Y PARTICIPAR
+        REGISTRARME Y PARTICIPAR →
       </button>
 
       <p class="form-legal">
@@ -775,50 +1323,44 @@
     </div>
   </section>
 
-  <div class="footer">© 2026 Pikeo Picnic · La Tribu Pikeo</div>
+  <div class="footer">© 2026 Pikeo Picnic · La Tribu Pikeo · Mundial 2026</div>
 </div>
 
-<!-- ════════ SUCCESS RESERVA ════════════════════════════ -->
+<!-- ════════ SUCCESS: RESERVA ════════════════════════════ -->
 <div id="successReserva" class="success-screen">
-  <div class="success-check check-reserva">🪑</div>
+  <div class="success-icon si-reserva">🪑</div>
 
-  <h2>Ya haces parte de<br><em>La Tribu Pikeo</em> ⚽</h2>
+  <h2>Ya haces parte de<br><em>La Tribu Pikeo</em></h2>
 
-  <p class="success-msg">
-    Tu reserva quedó confirmada.<br>
-    Preséntate en Pikeo y reclama tu cortesía.
-  </p>
+  <p>Tu reserva quedó confirmada.<br>Preséntate en Pikeo y reclama tu cortesía.</p>
 
   <div class="cortesia-pill">
-    🥂 Muestra esta pantalla al llegar para reclamar tu <strong>cortesía de bienvenida</strong>
+    🥂 Muestra esta pantalla al llegar para reclamar tu <strong>&nbsp;cortesía de bienvenida</strong>
   </div>
 
   <div class="success-card">
-    <div class="si"><span class="si-i">📋</span> Tu reserva quedó registrada.</div>
-    <div class="si"><span class="si-i">🎯</span> Tu pronóstico fue guardado.</div>
-    <div class="si"><span class="si-i">🏆</span> Si aciertas el marcador ganas un premio especial.</div>
-    <div class="si"><span class="si-i">🎰</span> Participas en el sorteo final del Mundial.</div>
+    <div class="si-row"><span class="si-icon">📋</span> Tu reserva quedó registrada.</div>
+    <div class="si-row"><span class="si-icon">🎯</span> Tu pronóstico fue guardado.</div>
+    <div class="si-row"><span class="si-icon">🏆</span> Si aciertas el marcador ganas un premio especial.</div>
+    <div class="si-row"><span class="si-icon">🎰</span> Participas en el sorteo final del Mundial.</div>
   </div>
 
   <button class="btn-otra" onclick="window.location.reload()">Registrar otra persona</button>
   <div class="footer">© 2026 Pikeo Picnic · La Tribu Pikeo</div>
 </div>
 
-<!-- ════════ SUCCESS WALK-IN ════════════════════════════ -->
+<!-- ════════ SUCCESS: WALK-IN ════════════════════════════ -->
 <div id="successWalkIn" class="success-screen">
-  <div class="success-check check-walkIn">⚽</div>
+  <div class="success-icon si-walkin">⚽</div>
 
   <h2>¡Bienvenido a<br><em>La Tribu Pikeo</em>!</h2>
 
-  <p class="success-msg">
-    Tu pronóstico quedó registrado.<br>
-    Disfruta el partido y espera los resultados.
-  </p>
+  <p>Tu pronóstico quedó registrado.<br>Disfruta el partido y espera los resultados.</p>
 
   <div class="success-card">
-    <div class="si"><span class="si-i">🎯</span> Tu pronóstico fue guardado.</div>
-    <div class="si"><span class="si-i">🏆</span> Si aciertas el marcador ganas un premio especial.</div>
-    <div class="si"><span class="si-i">🎰</span> Participas en el sorteo final del Mundial.</div>
+    <div class="si-row"><span class="si-icon">🎯</span> Tu pronóstico fue guardado.</div>
+    <div class="si-row"><span class="si-icon">🏆</span> Si aciertas el marcador ganas un premio especial.</div>
+    <div class="si-row"><span class="si-icon">🎰</span> Participas en el sorteo final del Mundial.</div>
   </div>
 
   <button class="btn-otra" onclick="window.location.reload()">Registrar otra persona</button>
@@ -826,39 +1368,119 @@
 </div>
 
 <script>
+  // ── CONFIGURACIÓN ──────────────────────────────────────
+  // Cambia esta fecha al próximo partido que vas a transmitir
+  const PROXIMO_PARTIDO = new Date('2026-06-15T20:00:00-05:00');
+  const CUPOS_TOTAL = 50; // cupos máximos por partido
+  // ──────────────────────────────────────────────────────
+
   let tipoSeleccionado = null;
 
-  function seleccionarTipo(tipo) {
-    tipoSeleccionado = tipo;
+  // ── COUNTDOWN ─────────────────────────────────────────
+  function actualizarCountdown() {
+    const ahora = new Date();
+    const diff = PROXIMO_PARTIDO - ahora;
 
-    document.getElementById('btnReserva').classList.toggle('selected', tipo === 'reserva');
-    document.getElementById('btnWalkIn').classList.toggle('selected', tipo === 'walkin');
+    if (diff <= 0) {
+      ['cd-d','cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '00');
+      return;
+    }
 
-    // Mostrar u ocultar campos de reserva
-    document.getElementById('reservaFields').classList.toggle('visible', tipo === 'reserva');
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
 
-    // Limpiar error si había
-    document.getElementById('errorMsg').classList.remove('show');
+    document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
+    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
   }
 
-  // Live-update nombres en marcador
-  document.getElementById('equipoA').addEventListener('input', function() {
-    document.getElementById('labelA').textContent = this.value.trim() || 'Equipo A';
-  });
-  document.getElementById('equipoB').addEventListener('input', function() {
-    document.getElementById('labelB').textContent = this.value.trim() || 'Equipo B';
-  });
+  setInterval(actualizarCountdown, 1000);
+  actualizarCountdown();
 
+  // ── CUPOS PROGRESS ────────────────────────────────────
+  async function cargarCupos() {
+    try {
+      const d = await (await fetch('/api/stats')).json();
+      const pct = Math.min(100, Math.round((d.total / CUPOS_TOTAL) * 100));
+      document.getElementById('cupos-txt').textContent = `${d.total} / ${CUPOS_TOTAL}`;
+      setTimeout(() => {
+        document.getElementById('progressFill').style.width = pct + '%';
+      }, 400);
+    } catch {
+      document.getElementById('cupos-txt').textContent = 'Disponibles';
+    }
+  }
+  cargarCupos();
+
+  // ── FADE IN ON SCROLL ─────────────────────────────────
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ── TIPO SELECTOR ─────────────────────────────────────
+  function seleccionarTipo(tipo) {
+    tipoSeleccionado = tipo;
+    document.getElementById('btnReserva').classList.toggle('selected', tipo === 'reserva');
+    document.getElementById('btnWalkIn').classList.toggle('selected', tipo === 'walkin');
+    document.getElementById('reservaFields').classList.toggle('visible', tipo === 'reserva');
+    document.getElementById('errorMsg').classList.remove('show');
+    actualizarSteps();
+  }
+
+  // ── PROGRESS STEPS ────────────────────────────────────
+  function actualizarSteps() {
+    const nombre = document.getElementById('nombre').value.trim();
+    const wa     = document.getElementById('whatsapp').value.trim();
+    const golA   = document.getElementById('golA').value;
+    const golB   = document.getElementById('golB').value;
+    const eqA    = document.getElementById('equipoA').value.trim();
+    const eqB    = document.getElementById('equipoB').value.trim();
+
+    const s1done = !!tipoSeleccionado;
+    const s2done = s1done && !!nombre && wa.replace(/\D/g,'').length >= 7;
+    const s3done = s2done && !!eqA && !!eqB && golA !== '' && golB !== '';
+
+    setStep('step1', s1done ? 'done' : 'active');
+    setStep('step2', s2done ? 'done' : s1done ? 'active' : '');
+    setStep('step3', s3done ? 'done' : s2done ? 'active' : '');
+    setStep('step4', s3done ? 'active' : '');
+
+    document.getElementById('line1').classList.toggle('done', s1done);
+    document.getElementById('line2').classList.toggle('done', s2done);
+    document.getElementById('line3').classList.toggle('done', s3done);
+  }
+
+  function setStep(id, state) {
+    const el = document.getElementById(id);
+    el.className = 'step' + (state ? ' ' + state : '');
+    if (state === 'done') el.querySelector('.step-circle').textContent = '✓';
+    else el.querySelector('.step-circle').textContent = id.replace('step','');
+  }
+
+  // ── LIVE MARCADOR ─────────────────────────────────────
+  function actualizarMarcador() {
+    const a = document.getElementById('equipoA').value.trim();
+    const b = document.getElementById('equipoB').value.trim();
+    document.getElementById('labelA').textContent = a || 'Equipo A';
+    document.getElementById('labelB').textContent = b || 'Equipo B';
+    actualizarSteps();
+  }
+
+  // ── ENVÍO ─────────────────────────────────────────────
   async function enviar() {
     const btn     = document.getElementById('btnSubmit');
     const errorEl = document.getElementById('errorMsg');
     errorEl.classList.remove('show');
 
-    // Validar tipo
     if (!tipoSeleccionado) {
-      errorEl.textContent = 'Primero indica cómo vas a participar: ¿reservas mesa o ya estás en Pikeo?';
+      errorEl.textContent = 'Primero indica cómo vas a participar.';
       errorEl.classList.add('show');
-      errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
       return;
     }
 
@@ -874,26 +1496,24 @@
     const horaReserva  = document.getElementById('horaReserva').value;
     const personas     = document.getElementById('personas').value;
 
-    // Validaciones base
     if (!nombre || !whatsapp || !equipoA || !equipoB || golA === '' || golB === '') {
       errorEl.textContent = 'Por favor completa todos los campos para continuar.';
       errorEl.classList.add('show');
-      errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
       return;
     }
 
-    if (whatsapp.replace(/\D/g, '').length < 7) {
+    if (whatsapp.replace(/\D/g,'').length < 7) {
       errorEl.textContent = 'Ingresa un número de WhatsApp válido.';
       errorEl.classList.add('show');
       document.getElementById('whatsapp').focus();
       return;
     }
 
-    // Validaciones extra solo para reserva
     if (tipoSeleccionado === 'reserva' && (!fechaReserva || !horaReserva || !personas)) {
       errorEl.textContent = 'Completa la fecha, hora y número de personas para tu reserva.';
       errorEl.classList.add('show');
-      errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
       return;
     }
 
@@ -906,37 +1526,28 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tipo: tipoSeleccionado,
-          nombre,
-          whatsapp,
+          nombre, whatsapp,
           fecha_reserva:     tipoSeleccionado === 'reserva' ? fechaReserva : '',
           hora_reserva:      tipoSeleccionado === 'reserva' ? horaReserva  : '',
           cantidad_personas: tipoSeleccionado === 'reserva' ? parseInt(personas) : 0,
-          equipo_a: equipoA,
-          equipo_b: equipoB,
-          gol_a: parseInt(golA),
-          gol_b: parseInt(golB),
+          equipo_a: equipoA, equipo_b: equipoB,
+          gol_a: parseInt(golA), gol_b: parseInt(golB),
           acepta_comunicaciones: comun
         })
       });
 
       if (!res.ok) throw new Error();
 
-      // Mostrar pantalla de éxito según tipo
       document.getElementById('landing').style.display = 'none';
-
-      if (tipoSeleccionado === 'reserva') {
-        document.getElementById('successReserva').classList.add('show');
-      } else {
-        document.getElementById('successWalkIn').classList.add('show');
-      }
-
+      const screen = tipoSeleccionado === 'reserva' ? 'successReserva' : 'successWalkIn';
+      document.getElementById(screen).classList.add('show');
       window.scrollTo(0, 0);
 
     } catch {
       errorEl.textContent = 'Algo salió mal. Intenta de nuevo.';
       errorEl.classList.add('show');
       btn.disabled = false;
-      btn.innerHTML = 'REGISTRARME Y PARTICIPAR';
+      btn.innerHTML = 'REGISTRARME Y PARTICIPAR →';
     }
   }
 </script>
