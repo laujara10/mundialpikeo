@@ -1070,7 +1070,7 @@
 
   <!-- Top bar -->
   <div class="topbar">
-    ⚽ Mundial 2026 <span>·</span> La Tribu Pikeo <span>·</span> Cupos Limitados
+    ⚽ Partidos todos los días <span>·</span> ¿Ya tienes tu mesa en Pikeo? <span>·</span> Cupos limitados
   </div>
 
   <!-- Nav -->
@@ -1085,10 +1085,10 @@
   <section class="hero">
     <div class="hero-badge fade-in">
       <span class="badge-dot"></span>
-      Mundial 2026 · Cupos disponibles
+      El plan familiar del Mundial 2026
     </div>
 
-    <p class="hero-eyebrow fade-in">No todos ven el partido. Algunos lo viven.</p>
+    <p class="hero-eyebrow fade-in">El plan del Mundial que tu familia merece</p>
 
     <h1 class="hero-title fade-in">
       <span class="line-1">La Tribu</span>
@@ -1096,12 +1096,12 @@
     </h1>
 
     <p class="hero-sub fade-in">
-      Reserva tu mesa, deja tu pronóstico y participa por premios durante todo el torneo.
+      Hay partido hoy, mañana y pasado. Trae a los tuyos, reserva tu mesa y vive el Mundial como nunca — con buena comida, premios y toda la tribu.
     </p>
 
     <!-- Countdown -->
     <div class="countdown-wrap fade-in">
-      <p class="countdown-label">⏱ Próximo partido en</p>
+      <p class="countdown-label">⏳ El Mundial se acaba en</p>
       <div class="countdown-grid">
         <div class="cd-block"><span class="cd-num" id="cd-d">00</span><span class="cd-unit">días</span></div>
         <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-unit">horas</span></div>
@@ -1124,37 +1124,46 @@
 
   <!-- Premios -->
   <section class="premios-section fade-in">
-    <p class="section-eyebrow">Lo que puedes ganar</p>
-    <h2 class="section-title">Premios del torneo</h2>
+    <p class="section-eyebrow">El plan perfecto del Mundial</p>
+    <h2 class="section-title">Para toda la tribu</h2>
+
+    <!-- FOMO strip -->
+    <div style="background:var(--verde);border-radius:14px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+      <span style="font-size:22px;">📅</span>
+      <div>
+        <div style="font-family:var(--ff-display);font-size:16px;font-weight:800;color:#a8d5ab;text-transform:uppercase;letter-spacing:.06em;">Hay partido hoy, mañana y pasado</div>
+        <div style="font-size:12px;color:rgba(168,213,171,0.7);margin-top:2px;">Puedes venir a cualquier partido — cada uno vale para los premios</div>
+      </div>
+    </div>
 
     <div class="premios-grid">
       <div class="premio-card featured">
         <span class="premio-icon">🥂</span>
         <div class="premio-name">Cortesía de bienvenida</div>
-        <div class="premio-desc">Para todos los que reservan mesa con anticipación.</div>
+        <div class="premio-desc">Para todos los que reservan con anticipación. Llégate con tu familia y empieza el plan bien.</div>
         <span class="premio-tag">Solo al reservar</span>
       </div>
 
       <div class="premio-card">
         <span class="premio-icon">🏆</span>
-        <div class="premio-name">Premio marcador</div>
-        <div class="premio-desc">Si aciertas el resultado exacto del partido.</div>
-        <span class="premio-tag">Para todos</span>
+        <div class="premio-name">Premio por partido</div>
+        <div class="premio-desc">Adivina el marcador exacto y gana en ese partido.</div>
+        <span class="premio-tag">Todos los días</span>
       </div>
 
       <div class="premio-card">
         <span class="premio-icon">🎰</span>
-        <div class="premio-name">Sorteo final</div>
-        <div class="premio-desc">Premio mayor al final del Mundial.</div>
-        <span class="premio-tag">Para todos</span>
+        <div class="premio-name">Gran sorteo final</div>
+        <div class="premio-desc">Cada partido que veas suma una participación al sorteo del Mundial.</div>
+        <span class="premio-tag">Más vengas, más chances</span>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <div class="hero-cta-wrap fade-in">
-    <a href="#formulario" class="btn-hero">RESERVAR Y PARTICIPAR →</a>
-    <p class="cupos-note"><strong>Cupos limitados por partido</strong> · No pierdas el tuyo</p>
+    <a href="#formulario" class="btn-hero">QUIERO VIVIR EL MUNDIAL →</a>
+    <p class="cupos-note"><strong>⚡ Partidos todos los días</strong> · Reserva antes de que se llene</p>
   </div>
 
   <div class="divider"></div>
@@ -1163,8 +1172,8 @@
   <section class="form-section" id="formulario">
 
     <div class="form-header fade-in">
-      <h2>Únete ahora</h2>
-      <p>Elige cómo participas y deja tu pronóstico</p>
+      <h2>Asegura tu mesa</h2>
+      <p>Trae a tu familia, tus amigos, a todos — hay espacio para la tribu</p>
     </div>
 
     <!-- Paso a paso visual -->
@@ -1369,8 +1378,8 @@
 
 <script>
   // ── CONFIGURACIÓN ──────────────────────────────────────
-  // Cambia esta fecha al próximo partido que vas a transmitir
-  const PROXIMO_PARTIDO = new Date('2026-06-15T20:00:00-05:00');
+  // Final del Mundial 2026 (19 de julio, Estadio MetLife)
+  const PROXIMO_PARTIDO = new Date('2026-07-19T15:00:00-05:00');
   const CUPOS_TOTAL = 50; // cupos máximos por partido
   // ──────────────────────────────────────────────────────
 
