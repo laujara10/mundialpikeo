@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · La Tribu Pikeo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --negro:     #0E0905;
+      --naranja:   #d8450b;
+      --naranja-2: #ef783e;
+      --ambar:     #db8c23;
+      --crema:     #f4e6c9;
+      --crema-dim: rgba(244,230,201,0.45);
+      --verde:     #2b532e;
+      --card:      #161008;
+      --card2:     #1d1309;
+      --borde:     rgba(244,230,201,0.08);
+    }
+
+    body {
+      background: var(--negro);
+      color: var(--crema);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--card);
+      border-bottom: 1px solid var(--borde);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: var(--naranja);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .brand h1 { font-size: 15px; font-weight: 800; }
+    .brand p  { font-size: 11px; color: var(--crema-dim); margin-top: 1px; }
+
+    .header-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ambar);
+      background: rgba(219,140,35,0.1);
+      border: 1px solid rgba(219,140,35,0.22);
+      border-radius: 100px;
+      padding: 4px 12px;
+    }
+
+    /* ── MAIN ── */
+    .main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: var(--card2);
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 20px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--naranja), var(--ambar));
+    }
+
+    .stat-n {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--naranja);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-l {
+      font-size: 11px;
+      color: var(--crema-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      background: var(--card2);
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .inp {
+      flex: 1;
+      min-width: 130px;
+      background: rgba(244,230,201,0.05);
+      border: 1px solid rgba(244,230,201,0.1);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--crema);
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .inp::placeholder { color: rgba(244,230,201,0.22); }
+    .inp:focus { border-color: var(--naranja); }
+    input[type="date"].inp { color-scheme: dark; max-width: 170px; }
+
+    .btn {
+      padding: 10px 15px;
+      border-radius: 10px;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-gold   { background: var(--naranja); color: var(--crema); }
+    .btn-gold:hover { background: #c23a08; }
+    .btn-out    { background: rgba(219,140,35,0.12); border: 1px solid rgba(219,140,35,0.28); color: var(--ambar); }
+    .btn-out:hover { background: rgba(219,140,35,0.22); }
+    .btn-ghost  { background: transparent; border: 1px solid var(--borde); color: var(--crema-dim); }
+    .btn-ghost:hover { color: var(--crema); }
+    .btn-clear  { background: transparent; border: none; color: rgba(244,230,201,0.28); font-size: 13px; cursor: pointer; padding: 10px 6px; }
+    .btn-clear:hover { color: var(--crema-dim); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--card2);
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .table-top {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--borde);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .table-title {
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .count {
+      background: rgba(216,69,11,0.14);
+      color: var(--naranja-2);
+      border: 1px solid rgba(216,69,11,0.22);
+      border-radius: 100px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .export-row { display: flex; gap: 8px; }
+
+    .overflow { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+
+    thead th {
+      padding: 11px 14px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(244,230,201,0.32);
+      background: rgba(244,230,201,0.02);
+      border-bottom: 1px solid var(--borde);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(244,230,201,0.04);
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(244,230,201,0.02); }
+
+    tbody td {
+      padding: 13px 14px;
+      font-size: 13px;
+      color: rgba(244,230,201,0.82);
+      white-space: nowrap;
+    }
+
+    /* Partido badge */
+    .partido-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .partido-nombres {
+      font-size: 12px;
+      color: var(--crema-dim);
+    }
+
+    .marcador {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(219,140,35,0.1);
+      border: 1px solid rgba(219,140,35,0.22);
+      border-radius: 7px;
+      padding: 3px 9px;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--ambar);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+
+    /* Status */
+    .st {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .st-p { background: rgba(244,230,201,0.06); color: rgba(244,230,201,0.32); }
+    .st-c { background: rgba(43,83,46,0.22); color: #7ec882; border: 1px solid rgba(43,83,46,0.38); }
+
+    /* Check-in btn */
+    .btn-ci {
+      background: rgba(43,83,46,0.18);
+      border: 1px solid rgba(43,83,46,0.38);
+      color: #7ec882;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .btn-ci:hover { background: rgba(43,83,46,0.32); }
+    .btn-ci:active { transform: scale(0.96); }
+    .btn-ci:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+    .ci-done { font-size: 12px; color: #7ec882; font-weight: 700; }
+
+    .wa-link { color: var(--naranja-2); text-decoration: none; }
+    .wa-link:hover { text-decoration: underline; }
+
+    .si-yes { color: #7ec882; font-weight: 600; }
+    .si-no  { color: rgba(244,230,201,0.22); }
+
+    .id-cell { color: rgba(244,230,201,0.22) !important; font-size: 12px !important; }
+    .date-cell { color: rgba(244,230,201,0.38) !important; font-size: 12px !important; }
+
+    /* Empty / loading */
+    .empty, .loading {
+      text-align: center;
+      padding: 56px 24px;
+      color: rgba(244,230,201,0.25);
+      font-size: 14px;
+    }
+    .empty-icon { font-size: 36px; margin-bottom: 12px; }
+
+    @media (max-width: 640px) {
+      .main { padding: 14px; }
+      .stat-n { font-size: 28px; }
+      .header-tag { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <div class="brand-icon">⚽</div>
+    <div>
+      <h1>Panel Admin · Pikeo</h1>
+      <p>La Tribu Pikeo · Mundial 2026</p>
+    </div>
+  </div>
+  <span class="header-tag">Interno</span>
+</div>
+
+<div class="main">
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-n" id="sTotal">—</div>
+      <div class="stat-l">Reservas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n" id="sCheckins">—</div>
+      <div class="stat-l">Check-ins</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n" id="sPersonas">—</div>
+      <div class="stat-l">Personas</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <input class="inp" type="text" id="bNombre"  placeholder="🔍 Buscar nombre..."    oninput="filtrar()" />
+    <input class="inp" type="text" id="bWA"      placeholder="📱 Buscar WhatsApp..."  oninput="filtrar()" style="max-width:190px;" />
+    <input class="inp" type="date" id="bFecha"   onchange="filtrar()" />
+    <button class="btn-clear" onclick="limpiar()">✕ Limpiar</button>
+    <div class="export-row">
+      <button class="btn btn-ghost" onclick="exp('csv')">⬇ CSV</button>
+      <button class="btn btn-out"   onclick="exp('excel')">⬇ Excel</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <div class="table-top">
+      <div class="table-title">
+        Reservas
+        <span class="count" id="countBadge">0</span>
+      </div>
+    </div>
+
+    <div class="overflow">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>WhatsApp</th>
+            <th>Reserva · Hora</th>
+            <th>Personas</th>
+            <th>Partido · Pronóstico</th>
+            <th>Estado</th>
+            <th>Check-in</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="10"><div class="loading">Cargando...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let todas = [];
+
+  async function cargarStats() {
+    try {
+      const d = await (await fetch('/api/stats')).json();
+      document.getElementById('sTotal').textContent    = d.total;
+      document.getElementById('sCheckins').textContent = d.checkins;
+      document.getElementById('sPersonas').textContent = d.personas;
+    } catch {}
+  }
+
+  async function cargar() {
+    try {
+      todas = await (await fetch('/api/reservas')).json();
+      filtrar();
+    } catch {
+      document.getElementById('tbody').innerHTML =
+        '<tr><td colspan="10"><div class="empty"><div class="empty-icon">⚠️</div>Error cargando datos.</div></td></tr>';
+    }
+  }
+
+  function filtrar() {
+    const nom   = document.getElementById('bNombre').value.toLowerCase().trim();
+    const wa    = document.getElementById('bWA').value.trim();
+    const fecha = document.getElementById('bFecha').value;
+
+    const lista = todas.filter(r => {
+      if (nom   && !r.nombre.toLowerCase().includes(nom)) return false;
+      if (wa    && !r.whatsapp.includes(wa)) return false;
+      if (fecha && r.fecha_reserva !== fecha) return false;
+      return true;
+    });
+
+    renderizar(lista);
+  }
+
+  function renderizar(lista) {
+    document.getElementById('countBadge').textContent = lista.length;
+    const tbody = document.getElementById('tbody');
+
+    if (!lista.length) {
+      tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><div class="empty-icon">📋</div>Sin resultados.</div></td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = lista.map(r => {
+      const waNum = r.whatsapp.replace(/\D/g, '');
+
+      // Fecha reserva formateada
+      const fechaFmt = r.fecha_reserva
+        ? new Date(r.fecha_reserva + 'T12:00:00').toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'2-digit' })
+        : '—';
+
+      const ciBtn = r.checkin
+        ? `<span class="ci-done">✅ Presente</span>`
+        : `<button class="btn-ci" onclick="checkin(${r.id},this)">Marcar asistencia</button>`;
+
+      return `<tr>
+        <td class="id-cell">${r.id}</td>
+        <td style="font-weight:700;">${esc(r.nombre)}</td>
+        <td><a class="wa-link" href="https://wa.me/${waNum}" target="_blank">${esc(r.whatsapp)}</a></td>
+        <td>${fechaFmt}${r.hora_reserva ? ' · ' + r.hora_reserva : ''}</td>
+        <td style="text-align:center;font-weight:800;">${r.cantidad_personas}</td>
+        <td>
+          <div class="partido-cell">
+            <span class="partido-nombres">${esc(r.equipo_a)} vs ${esc(r.equipo_b)}</span>
+            <span class="marcador">${r.gol_a} – ${r.gol_b}</span>
+          </div>
+        </td>
+        <td><span class="st ${r.estado === 'confirmado' ? 'st-c' : 'st-p'}">${r.estado}</span></td>
+        <td>${ciBtn}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function limpiar() {
+    document.getElementById('bNombre').value = '';
+    document.getElementById('bWA').value     = '';
+    document.getElementById('bFecha').value  = '';
+    renderizar(todas);
+  }
+
+  async function checkin(id, btn) {
+    btn.disabled = true;
+    btn.textContent = '...';
+    try {
+      await fetch(`/api/reservas/${id}/checkin`, { method: 'PATCH' });
+      const r = todas.find(x => x.id === id);
+      if (r) { r.checkin = true; r.estado = 'confirmado'; }
+      filtrar();
+      cargarStats();
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Marcar asistencia';
+    }
+  }
+
+  function exp(t) { window.open(`/api/export/${t}`, '_blank'); }
+
+  function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  cargarStats();
+  cargar();
+  setInterval(() => { cargar(); cargarStats(); }, 30000);
+</script>
+
+</body>
+</html>

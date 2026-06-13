@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0E0905" />
+  <title>La Tribu Pikeo ⚽</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --negro:     #0E0905;
+      --naranja:   #d8450b;
+      --naranja-2: #ef783e;
+      --ambar:     #db8c23;
+      --crema:     #f4e6c9;
+      --crema-dim: rgba(244,230,201,0.55);
+      --verde:     #2b532e;
+      --card:      #1a1008;
+      --borde:     rgba(244,230,201,0.09);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--negro);
+      color: var(--crema);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      padding: 44px 24px 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 100% 55% at 50% 0%, rgba(216,69,11,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .logo svg { width: 50px; height: 50px; }
+
+    .logo-pikeo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.22em;
+      color: var(--naranja);
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .logo-picnic {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      color: var(--ambar);
+      text-transform: uppercase;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(43,83,46,0.2);
+      border: 1px solid rgba(43,83,46,0.4);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7ec882;
+      margin-bottom: 24px;
+    }
+
+    .dot { width:6px; height:6px; border-radius:50%; background:#7ec882; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ambar);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 11vw, 60px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    h1 .t1 { color: var(--crema); }
+    h1 .t2 { color: var(--naranja); }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--crema-dim);
+      line-height: 1.65;
+      max-width: 320px;
+      margin: 0 auto 32px;
+    }
+
+    .benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .b {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      background: rgba(244,230,201,0.04);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 13px 15px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--crema);
+    }
+
+    .btn-hero {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      background: var(--naranja);
+      color: var(--crema);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 16px;
+      padding: 20px 24px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(216,69,11,0.32);
+      transition: transform 0.12s, background 0.12s;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    .btn-hero:active { transform: scale(0.97); }
+
+    .cupos {
+      font-size: 12px;
+      color: rgba(244,230,201,0.3);
+    }
+    .cupos strong { color: var(--naranja-2); }
+
+    /* ── DIVIDER ──────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(244,230,201,0.07), transparent);
+    }
+
+    /* ── FORM ─────────────────────────────────────────── */
+    .form-section {
+      padding: 52px 24px 48px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .form-header h2 { font-size: 24px; font-weight: 900; color: var(--crema); margin-bottom: 6px; }
+    .form-header p  { font-size: 14px; color: var(--crema-dim); }
+
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--borde);
+      border-radius: 20px;
+      padding: 26px 22px;
+    }
+
+    /* Section label inside card */
+    .section-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 18px;
+    }
+
+    .sl-naranja {
+      background: rgba(216,69,11,0.12);
+      color: var(--naranja-2);
+      border: 1px solid rgba(216,69,11,0.25);
+    }
+
+    .sl-ambar {
+      background: rgba(219,140,35,0.12);
+      color: var(--ambar);
+      border: 1px solid rgba(219,140,35,0.25);
+    }
+
+    .section-divider {
+      height: 1px;
+      background: rgba(244,230,201,0.07);
+      margin: 24px 0;
+    }
+
+    /* Fields */
+    .field { margin-bottom: 16px; }
+
+    .field-label {
+      display: block;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(244,230,201,0.38);
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      background: rgba(244,230,201,0.045);
+      border: 1px solid rgba(244,230,201,0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 16px;
+      color: var(--crema);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      font-family: inherit;
+    }
+
+    .field input::placeholder { color: rgba(244,230,201,0.2); }
+
+    .field input:focus,
+    .field select:focus { border-color: var(--naranja); }
+
+    /* Date/time row */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Partido grid */
+    .partido-grid {
+      display: grid;
+      grid-template-columns: 1fr 28px 1fr;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .vs-divider {
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(244,230,201,0.2);
+      text-align: center;
+      padding-bottom: 14px;
+    }
+
+    .sub-hint {
+      font-size: 10px;
+      color: rgba(244,230,201,0.25);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    input.center { text-align: center; }
+
+    /* Ocultar flechas de inputs numéricos */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    /* Resultado marcador */
+    .resultado-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+      background: rgba(219,140,35,0.06);
+      border: 1px solid rgba(219,140,35,0.18);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .resultado-sep {
+      font-size: 20px;
+      font-weight: 900;
+      color: rgba(244,230,201,0.2);
+      text-align: center;
+    }
+
+    .resultado-row input {
+      background: rgba(244,230,201,0.06) !important;
+      border: 1px solid rgba(244,230,201,0.12) !important;
+      border-radius: 10px;
+      padding: 14px 10px !important;
+      font-size: 22px !important;
+      font-weight: 800 !important;
+      text-align: center;
+    }
+
+    .resultado-row input:focus { border-color: var(--ambar) !important; }
+
+    .equipo-name {
+      font-size: 11px;
+      color: rgba(244,230,201,0.3);
+      text-align: center;
+      margin-top: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Select arrow */
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23f4e6c9' stroke-opacity='.35' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+    .field select option { background: #1a1008; color: #f4e6c9; }
+
+    /* Checkbox */
+    .check-field {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      background: rgba(43,83,46,0.1);
+      border: 1px solid rgba(43,83,46,0.3);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      margin-bottom: 22px;
+    }
+
+    .check-field input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      accent-color: #5aaf5e;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .check-field span {
+      font-size: 13px;
+      color: rgba(244,230,201,0.72);
+      line-height: 1.55;
+    }
+
+    /* Error */
+    .error-msg {
+      display: none;
+      background: rgba(216,69,11,0.1);
+      border: 1px solid rgba(216,69,11,0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--naranja-2);
+      margin-bottom: 16px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .error-msg.show { display: block; }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%;
+      background: var(--naranja);
+      color: var(--crema);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 14px;
+      padding: 19px 24px;
+      cursor: pointer;
+      box-shadow: 0 8px 36px rgba(216,69,11,0.3);
+      transition: transform 0.12s, background 0.12s, opacity 0.15s;
+    }
+
+    .btn-submit:hover  { background: #c23a08; }
+    .btn-submit:active { transform: scale(0.97); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .form-legal {
+      text-align: center;
+      font-size: 11px;
+      color: rgba(244,230,201,0.2);
+      margin-top: 14px;
+      line-height: 1.55;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(244,230,201,0.25);
+      border-top-color: var(--crema);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SUCCESS ──────────────────────────────────────── */
+    .success-screen {
+      display: none;
+      min-height: 100svh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .success-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 10%, rgba(43,83,46,0.22) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .success-screen.show { display: flex; }
+
+    .success-check {
+      width: 76px; height: 76px;
+      background: var(--verde);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 40px rgba(43,83,46,0.45);
+      position: relative;
+      z-index: 1;
+    }
+
+    .success-screen h2 {
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: var(--crema);
+      margin-bottom: 10px;
+      max-width: 360px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .success-screen h2 em {
+      font-style: normal;
+      color: var(--naranja);
+    }
+
+    .success-msg {
+      font-size: 15px;
+      color: var(--crema-dim);
+      line-height: 1.65;
+      max-width: 340px;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .success-card {
+      background: var(--card);
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      margin-bottom: 20px;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    .si {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(244,230,201,0.05);
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(244,230,201,0.82);
+    }
+    .si:last-child { border-bottom: none; }
+    .si-i { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 11px;
+      color: rgba(244,230,201,0.15);
+      letter-spacing: 0.03em;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════ LANDING ════════════════════════════════════ -->
+<div id="landing">
+
+  <section class="hero">
+    <div class="logo">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="28" y="30" width="4" height="22" rx="2" fill="#d8450b"/>
+        <ellipse cx="30" cy="14" rx="3" ry="15" transform="rotate(-28 30 14)" fill="#d8450b" opacity=".9"/>
+        <ellipse cx="30" cy="14" rx="3" ry="15" transform="rotate(28 30 14)"  fill="#d8450b" opacity=".9"/>
+        <ellipse cx="30" cy="11" rx="3" ry="13" transform="rotate(-58 30 11)" fill="#d8450b" opacity=".8"/>
+        <ellipse cx="30" cy="11" rx="3" ry="13" transform="rotate(58 30 11)"  fill="#d8450b" opacity=".8"/>
+        <ellipse cx="30" cy="9"  rx="2.5" ry="11" transform="rotate(-90 30 9)" fill="#d8450b" opacity=".7"/>
+        <ellipse cx="30" cy="9"  rx="2.5" ry="12" transform="rotate(-10 30 9)" fill="#d8450b"/>
+      </svg>
+      <span class="logo-pikeo">PIKEO</span>
+      <span class="logo-picnic">◆ PICNIC ◆</span>
+    </div>
+
+    <div class="badge"><span class="dot"></span>Mundial 2026 · Cupos disponibles</div>
+
+    <p class="eyebrow">No todos ven el partido. Algunos lo viven.</p>
+
+    <h1>
+      <span class="t1">LA TRIBU</span><br>
+      <span class="t2">PIKEO ⚽</span>
+    </h1>
+
+    <p class="hero-sub">
+      Reserva tu mesa, deja tu pronóstico y participa por premios durante todo el torneo.
+    </p>
+
+    <div class="benefits">
+      <div class="b">🥂&nbsp; Cortesía de bienvenida por reservar</div>
+      <div class="b">🏆&nbsp; Premios durante cada partido</div>
+      <div class="b">🎯&nbsp; Participación en el sorteo final</div>
+      <div class="b">⏳&nbsp; Cupos limitados por encuentro</div>
+    </div>
+
+    <a href="#formulario" class="btn-hero">RESERVAR Y PARTICIPAR</a>
+    <p class="cupos"><strong>⚡ Cupos limitados</strong> · Regístrate ahora</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ FORMULARIO ════════════════════════════════ -->
+  <section class="form-section" id="formulario">
+
+    <div class="form-header">
+      <h2>Únete a La Tribu ⚽</h2>
+      <p>Llena el formulario y asegura tu lugar</p>
+    </div>
+
+    <div class="form-card">
+
+      <div id="errorMsg" class="error-msg"></div>
+
+      <!-- ── SECCIÓN 1: TUS DATOS ── -->
+      <span class="section-label sl-naranja">👤 Tus datos</span>
+
+      <div class="field">
+        <label class="field-label">Nombre completo *</label>
+        <input type="text" id="nombre" placeholder="¿Cómo te llamamos?" autocomplete="given-name" />
+      </div>
+
+      <div class="field">
+        <label class="field-label">WhatsApp *</label>
+        <input type="tel" id="whatsapp" placeholder="+57 300 000 0000" inputmode="tel" autocomplete="tel" />
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- ── SECCIÓN 2: RESERVA ── -->
+      <span class="section-label sl-naranja">🪑 Tu reserva</span>
+
+      <div class="two-col">
+        <div class="field">
+          <label class="field-label">Fecha *</label>
+          <input type="date" id="fechaReserva" />
+        </div>
+        <div class="field">
+          <label class="field-label">Hora *</label>
+          <input type="time" id="horaReserva" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Número de personas *</label>
+        <select id="personas">
+          <option value="">¿Cuántos vienen?</option>
+          <option value="1">1 persona</option>
+          <option value="2">2 personas</option>
+          <option value="3">3 personas</option>
+          <option value="4">4 personas</option>
+          <option value="5">5 personas</option>
+          <option value="6">6 personas</option>
+          <option value="7">7 personas</option>
+          <option value="8">8 o más personas</option>
+        </select>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- ── SECCIÓN 3: PRONÓSTICO ── -->
+      <span class="section-label sl-ambar">🎯 Tu pronóstico</span>
+
+      <!-- Equipos -->
+      <div class="field">
+        <label class="field-label">Equipos *</label>
+        <div class="partido-grid">
+          <div>
+            <input type="text" id="equipoA" placeholder="Ej: Colombia" />
+            <p class="sub-hint">Equipo A</p>
+          </div>
+          <div class="vs-divider">VS</div>
+          <div>
+            <input type="text" id="equipoB" placeholder="Ej: Brasil" />
+            <p class="sub-hint">Equipo B</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultado -->
+      <div class="field">
+        <label class="field-label">Resultado que pronosticas *</label>
+        <div class="resultado-row">
+          <div>
+            <input type="number" id="golA" class="center" placeholder="0" min="0" max="20" inputmode="numeric" />
+            <p class="equipo-name" id="labelA">Equipo A</p>
+          </div>
+          <div class="resultado-sep">—</div>
+          <div>
+            <input type="number" id="golB" class="center" placeholder="0" min="0" max="20" inputmode="numeric" />
+            <p class="equipo-name" id="labelB">Equipo B</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Checkbox -->
+      <label class="check-field">
+        <input type="checkbox" id="comunicaciones" />
+        <span>Quiero recibir beneficios exclusivos, promociones y eventos de Pikeo por WhatsApp.</span>
+      </label>
+
+      <button class="btn-submit" id="btnSubmit" onclick="enviar()">
+        RESERVAR Y PARTICIPAR
+      </button>
+
+      <p class="form-legal">
+        Al registrarte aceptas que Pikeo guarde tu información para gestionar tu participación en el evento.
+      </p>
+
+    </div>
+  </section>
+
+  <div class="footer">© 2026 Pikeo Picnic · La Tribu Pikeo</div>
+</div>
+
+<!-- ════════ SUCCESS ════════════════════════════════════ -->
+<div id="successScreen" class="success-screen">
+
+  <div class="success-check">✓</div>
+
+  <h2>Ya haces parte de<br><em>La Tribu Pikeo</em> ⚽</h2>
+
+  <p class="success-msg">
+    Tu participación fue registrada correctamente.<br>
+    Preséntate en Pikeo el día de tu reserva y reclama tu cortesía de bienvenida.
+  </p>
+
+  <div class="success-card">
+    <div class="si"><span class="si-i">📋</span> Tu reserva quedó guardada.</div>
+    <div class="si"><span class="si-i">🎯</span> Tu pronóstico fue registrado.</div>
+    <div class="si"><span class="si-i">🥂</span><span><strong>Muestra este mensaje al llegar</strong> para reclamar tu cortesía de bienvenida.</span></div>
+    <div class="si"><span class="si-i">🏆</span> Si aciertas el resultado participarás por premios especiales y el sorteo final del Mundial.</div>
+  </div>
+
+  <button onclick="window.location.reload()" style="
+    background: transparent;
+    border: 1px solid rgba(244,230,201,0.15);
+    border-radius: 12px;
+    color: rgba(244,230,201,0.45);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 24px;
+    cursor: pointer;
+    margin-bottom: 24px;
+    font-family: inherit;
+    transition: color 0.2s, border-color 0.2s;
+  " onmouseover="this.style.color='#f4e6c9';this.style.borderColor='rgba(244,230,201,0.3)'"
+     onmouseout="this.style.color='rgba(244,230,201,0.45)';this.style.borderColor='rgba(244,230,201,0.15)'">
+    Registrar otra persona
+  </button>
+
+  <div class="footer">© 2026 Pikeo Picnic · La Tribu Pikeo</div>
+</div>
+
+<script>
+  // Actualiza las etiquetas del marcador en tiempo real
+  document.getElementById('equipoA').addEventListener('input', function() {
+    document.getElementById('labelA').textContent = this.value.trim() || 'Equipo A';
+  });
+  document.getElementById('equipoB').addEventListener('input', function() {
+    document.getElementById('labelB').textContent = this.value.trim() || 'Equipo B';
+  });
+
+  async function enviar() {
+    const btn     = document.getElementById('btnSubmit');
+    const errorEl = document.getElementById('errorMsg');
+    errorEl.classList.remove('show');
+
+    const nombre       = document.getElementById('nombre').value.trim();
+    const whatsapp     = document.getElementById('whatsapp').value.trim();
+    const fechaReserva = document.getElementById('fechaReserva').value;
+    const horaReserva  = document.getElementById('horaReserva').value;
+    const personas     = document.getElementById('personas').value;
+    const equipoA      = document.getElementById('equipoA').value.trim();
+    const equipoB      = document.getElementById('equipoB').value.trim();
+    const golA         = document.getElementById('golA').value;
+    const golB         = document.getElementById('golB').value;
+    const comun        = document.getElementById('comunicaciones').checked;
+
+    if (!nombre || !whatsapp || !fechaReserva || !horaReserva || !personas ||
+        !equipoA || !equipoB || golA === '' || golB === '') {
+      errorEl.textContent = 'Por favor completa todos los campos para continuar.';
+      errorEl.classList.add('show');
+      errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (whatsapp.replace(/\D/g, '').length < 7) {
+      errorEl.textContent = 'Ingresa un número de WhatsApp válido.';
+      errorEl.classList.add('show');
+      document.getElementById('whatsapp').focus();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Guardando...';
+
+    try {
+      const res = await fetch('/api/reservas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre, whatsapp,
+          fecha_reserva: fechaReserva,
+          hora_reserva: horaReserva,
+          cantidad_personas: parseInt(personas),
+          equipo_a: equipoA,
+          equipo_b: equipoB,
+          gol_a: parseInt(golA),
+          gol_b: parseInt(golB),
+          acepta_comunicaciones: comun
+        })
+      });
+
+      if (!res.ok) throw new Error();
+
+      document.getElementById('landing').style.display = 'none';
+      document.getElementById('successScreen').classList.add('show');
+      window.scrollTo(0, 0);
+    } catch {
+      errorEl.textContent = 'Algo salió mal. Intenta de nuevo.';
+      errorEl.classList.add('show');
+      btn.disabled = false;
+      btn.innerHTML = 'RESERVAR Y PARTICIPAR';
+    }
+  }
+</script>
+
+</body>
+</html>
