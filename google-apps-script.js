@@ -1,99 +1,86 @@
-// ═══════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 //  LA TRIBU PIKEO · Google Apps Script
-//  Pega este código en script.google.com y publícalo como Web App
-// ═══════════════════════════════════════════════════════════════════
-
-const SHEET_NAME = 'Registros';
+//  Pega este código completo en script.google.com
+// ═══════════════════════════════════════════════════════════════
 
 function doPost(e) {
   try {
     const datos = JSON.parse(e.postData.contents);
     const hoja  = obtenerHoja();
 
-    const ahora = new Date();
-    const fechaRegistro = Utilities.formatDate(ahora, 'America/Bogota', 'dd/MM/yyyy HH:mm:ss');
+    const fecha = Utilities.formatDate(
+      new Date(), 'America/Bogota', 'dd/MM/yyyy HH:mm:ss'
+    );
 
     hoja.appendRow([
-      fechaRegistro,
+      fecha,
+      datos.tipo               || '',
       datos.nombre             || '',
       datos.whatsapp           || '',
-      datos.equipo1            || '',
-      datos.marcador1          !== undefined ? datos.marcador1 : '',
-      datos.equipo2            || '',
-      datos.marcador2          !== undefined ? datos.marcador2 : '',
-      datos.tipo               || '',
       datos.fecha_reserva      || '',
       datos.hora_reserva       || '',
       datos.cantidad_personas  || '',
+      datos.equipo_a           || '',
+      datos.gol_a              !== undefined ? datos.gol_a : '',
+      datos.equipo_b           || '',
+      datos.gol_b              !== undefined ? datos.gol_b : '',
       datos.acepta_comunicaciones || 'No'
     ]);
 
-    return respuesta({ ok: true });
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
 
   } catch(err) {
-    return respuesta({ ok: false, error: err.message });
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
-// Crea la hoja con encabezados si no existe
 function obtenerHoja() {
   const ss   = SpreadsheetApp.getActiveSpreadsheet();
-  let hoja   = ss.getSheetByName(SHEET_NAME);
+  let hoja   = ss.getSheetByName('Registros');
 
   if (!hoja) {
-    hoja = ss.insertSheet(SHEET_NAME);
+    hoja = ss.insertSheet('Registros');
+
+    // Encabezados
     hoja.appendRow([
       'Fecha registro',
+      'Tipo',
       'Nombre',
       'WhatsApp',
-      'Equipo 1',
-      'Marcador equipo 1',
-      'Equipo 2',
-      'Marcador equipo 2',
-      'Tipo participante',
       'Fecha reserva',
       'Hora reserva',
-      'Cantidad personas',
+      'Personas',
+      'Equipo A',
+      'Goles A',
+      'Equipo B',
+      'Goles B',
       'Acepta comunicaciones'
     ]);
 
     // Formato encabezados
-    const header = hoja.getRange(1, 1, 1, 12);
+    const header = hoja.getRange(1, 1, 1, 11);
     header.setBackground('#d8450b');
     header.setFontColor('#f4e6c9');
     header.setFontWeight('bold');
-    header.setFontSize(11);
     hoja.setFrozenRows(1);
-    hoja.setColumnWidth(1, 160);
-    hoja.setColumnWidth(2, 160);
-    hoja.setColumnWidth(3, 150);
+    hoja.setColumnWidths(1, 11, 150);
   }
 
   return hoja;
 }
 
-function respuesta(data) {
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-// Función de prueba — ejecútala manualmente para verificar que todo funciona
-function testInsertar() {
+// Ejecuta esto una vez para verificar que funciona
+function testConexion() {
   const hoja = obtenerHoja();
   hoja.appendRow([
-    '13/06/2026 10:00:00',
-    'TEST Laura',
-    '+57 300 000 0000',
-    'Colombia',
-    2,
-    'Brasil',
-    1,
-    'Reservar mesa',
-    '2026-06-15',
-    '18:00',
-    '4',
-    'Sí'
+    'PRUEBA - puedes borrar esta fila',
+    'Laura Test', '+57 300 000 0000',
+    '2026-06-20', '18:00', '4',
+    'Colombia', 2, 'Brasil', 1, 'Sí'
   ]);
-  Logger.log('Fila de prueba insertada correctamente.');
+  Logger.log('✅ Conexión exitosa');
 }

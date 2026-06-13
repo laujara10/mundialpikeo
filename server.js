@@ -1,12 +1,14 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 const XLSX = require('xlsx');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, 'db.json');
 
+// ── Base de datos local (solo para respaldo y panel admin) ──────
 function readDB() {
   if (!fs.existsSync(DB_FILE)) return { reservas: [], seq: 0 };
   return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
@@ -18,35 +20,79 @@ function writeDB(data) {
 
 if (!fs.existsSync(DB_FILE)) writeDB({ reservas: [], seq: 0 });
 
+// ── Enviar a Google Sheets (solo en producción) ─────────────────
+function enviarASheets(datos) {
+  const url = process.env.APPS_SCRIPT_URL;
+  if (!url) return; // sin URL = modo local, no hace nada
+
+  const body = JSON.stringify(datos);
+  const urlObj = new URL(url);
+
+  const opciones = {
+    hostname: urlObj.hostname,
+    path: urlObj.pathname + urlObj.search,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(body)
+    }
+  };
+
+  const req = https.request(opciones, (res) => {
+    // Seguir redirecciones de Google (código 302)
+    if (res.statusCode === 302 && res.headers.location) {
+      const loc = new URL(res.headers.location);
+      const req2 = https.request({
+        hostname: loc.hostname,
+        path: loc.pathname + loc.search,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(body)
+        }
+      }, () => {});
+      req2.on('error', () => {});
+      req2.write(body);
+      req2.end();
+    }
+  });
+
+  req.on('error', (e) => console.error('Sheets error:', e.message));
+  req.write(body);
+  req.end();
+}
+
+// ── Middleware ──────────────────────────────────────────────────
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Crear reserva
+// ── Crear reserva ───────────────────────────────────────────────
 app.post('/api/reservas', (req, res) => {
   const {
-    nombre, whatsapp,
+    tipo, nombre, whatsapp,
     fecha_reserva, hora_reserva, cantidad_personas,
     equipo_a, equipo_b, gol_a, gol_b,
     acepta_comunicaciones
   } = req.body;
 
-  if (!nombre || !whatsapp || !fecha_reserva || !hora_reserva ||
-      !cantidad_personas || !equipo_a || !equipo_b ||
+  if (!tipo || !nombre || !whatsapp || !equipo_a || !equipo_b ||
       gol_a === undefined || gol_b === undefined) {
     return res.status(400).json({ error: 'Faltan campos requeridos' });
   }
 
+  // Guardar en db.json (local y Railway como respaldo)
   const db = readDB();
   db.seq += 1;
 
   const nueva = {
     id: db.seq,
     fecha_registro: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' }),
+    tipo: tipo === 'reserva' ? 'Reserva' : 'Walk-in',
     nombre: String(nombre).trim(),
     whatsapp: String(whatsapp).trim(),
-    fecha_reserva,
-    hora_reserva,
-    cantidad_personas: parseInt(cantidad_personas),
+    fecha_reserva:    tipo === 'reserva' ? fecha_reserva : '',
+    hora_reserva:     tipo === 'reserva' ? hora_reserva  : '',
+    cantidad_personas: tipo === 'reserva' ? parseInt(cantidad_personas) : 0,
     equipo_a: String(equipo_a).trim(),
     equipo_b: String(equipo_b).trim(),
     gol_a: parseInt(gol_a),
@@ -58,20 +104,24 @@ app.post('/api/reservas', (req, res) => {
 
   db.reservas.unshift(nueva);
   writeDB(db);
+
+  // Enviar a Google Sheets en paralelo (no bloquea la respuesta)
+  enviarASheets(nueva);
+
   res.json({ success: true, id: nueva.id });
 });
 
-// Listar reservas
+// ── Listar reservas (panel admin) ───────────────────────────────
 app.get('/api/reservas', (req, res) => {
   const { nombre, whatsapp, fecha } = req.query;
   let lista = readDB().reservas;
-  if (nombre)  lista = lista.filter(r => r.nombre.toLowerCase().includes(nombre.toLowerCase()));
+  if (nombre)   lista = lista.filter(r => r.nombre.toLowerCase().includes(nombre.toLowerCase()));
   if (whatsapp) lista = lista.filter(r => r.whatsapp.includes(whatsapp));
-  if (fecha)   lista = lista.filter(r => r.fecha_reserva === fecha);
+  if (fecha)    lista = lista.filter(r => r.fecha_reserva === fecha);
   res.json(lista);
 });
 
-// Check-in
+// ── Check-in ────────────────────────────────────────────────────
 app.patch('/api/reservas/:id/checkin', (req, res) => {
   const id = parseInt(req.params.id);
   const db = readDB();
@@ -83,7 +133,7 @@ app.patch('/api/reservas/:id/checkin', (req, res) => {
   res.json({ success: true });
 });
 
-// Stats
+// ── Stats ───────────────────────────────────────────────────────
 app.get('/api/stats', (req, res) => {
   const lista = readDB().reservas;
   res.json({
@@ -93,7 +143,7 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
-// Exportar CSV
+// ── Exportar CSV ────────────────────────────────────────────────
 app.get('/api/export/csv', (req, res) => {
   const lista = readDB().reservas;
   const cols = ['id','fecha_registro','nombre','whatsapp','fecha_reserva','hora_reserva',
@@ -108,7 +158,7 @@ app.get('/api/export/csv', (req, res) => {
   res.send('﻿' + csv);
 });
 
-// Exportar Excel
+// ── Exportar Excel ──────────────────────────────────────────────
 app.get('/api/export/excel', (req, res) => {
   const lista = readDB().reservas;
   const ws = XLSX.utils.json_to_sheet(lista);
@@ -120,7 +170,10 @@ app.get('/api/export/excel', (req, res) => {
   res.send(buf);
 });
 
+// ── Start ───────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n🔥 La Tribu Pikeo → http://localhost:${PORT}`);
-  console.log(`📊 Panel admin     → http://localhost:${PORT}/admin.html\n`);
+  const modo = process.env.APPS_SCRIPT_URL ? '🟢 Producción (Google Sheets activo)' : '🟡 Local (solo db.json)';
+  console.log(`\n⚽ La Tribu Pikeo → http://localhost:${PORT}`);
+  console.log(`📊 Panel admin    → http://localhost:${PORT}/admin.html`);
+  console.log(`📋 Modo           → ${modo}\n`);
 });
