@@ -128,8 +128,54 @@ app.patch('/api/reservas/:id/checkin', (req, res) => {
   const r = db.reservas.find(x => x.id === id);
   if (!r) return res.status(404).json({ error: 'No encontrada' });
   r.checkin = true;
-  r.estado = 'confirmado';
   writeDB(db);
+  res.json({ success: true });
+});
+
+// ── Cambiar estado ───────────────────────────────────────────────
+app.patch('/api/reservas/:id/estado', (req, res) => {
+  const id     = parseInt(req.params.id);
+  const estado = req.body.estado;
+  const VALIDOS = ['pendiente', 'confirmada', 'cancelada'];
+  if (!VALIDOS.includes(estado)) return res.status(400).json({ error: 'Estado inválido' });
+
+  const db = readDB();
+  const r  = db.reservas.find(x => x.id === id);
+  if (!r) return res.status(404).json({ error: 'No encontrada' });
+  r.estado = estado;
+  writeDB(db);
+
+  enviarASheets({
+    action:        'updateEstado',
+    id:            r.id,
+    nombre:        r.nombre,
+    whatsapp:      r.whatsapp,
+    fecha_reserva: r.fecha_reserva,
+    estado
+  });
+
+  res.json({ success: true });
+});
+
+// ── Eliminar reserva ────────────────────────────────────────────
+app.delete('/api/reservas/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
+  const db = readDB();
+  const idx = db.reservas.findIndex(x => x.id === id);
+  if (idx === -1) return res.status(404).json({ error: 'No encontrada' });
+  const [eliminada] = db.reservas.splice(idx, 1);
+  writeDB(db);
+
+  // Sincronizar borrado con Google Sheets (best-effort, no bloquea)
+  enviarASheets({
+    action:        'delete',
+    id:            eliminada.id,
+    nombre:        eliminada.nombre,
+    whatsapp:      eliminada.whatsapp,
+    fecha_reserva: eliminada.fecha_reserva
+  });
+
   res.json({ success: true });
 });
 

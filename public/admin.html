@@ -274,8 +274,25 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
-    .st-p { background: rgba(244,230,201,0.06); color: rgba(244,230,201,0.32); }
-    .st-c { background: rgba(43,83,46,0.22); color: #7ec882; border: 1px solid rgba(43,83,46,0.38); }
+    .st-p  { background: rgba(244,230,201,0.06); color: rgba(244,230,201,0.32); }
+    .st-c  { background: rgba(43,83,46,0.22);   color: #7ec882; border: 1px solid rgba(43,83,46,0.38); }
+    .st-ca { background: rgba(180,30,30,0.14);  color: #e07070; border: 1px solid rgba(180,30,30,0.3); }
+
+    .btn-confirmar {
+      background: rgba(43,83,46,0.14);
+      border: 1px solid rgba(43,83,46,0.35);
+      color: #7ec882;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+      font-family: inherit;
+      margin-left: 6px;
+    }
+    .btn-confirmar:hover { background: rgba(43,83,46,0.28); }
 
     /* Check-in btn */
     .btn-ci {
@@ -296,6 +313,86 @@
     .btn-ci:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
     .ci-done { font-size: 12px; color: #7ec882; font-weight: 700; }
+
+    /* Delete btn */
+    .btn-del {
+      background: rgba(180,30,30,0.12);
+      border: 1px solid rgba(200,40,40,0.3);
+      color: #e07070;
+      border-radius: 8px;
+      padding: 6px 9px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      line-height: 1;
+    }
+    .btn-del:hover { background: rgba(200,40,40,0.28); }
+    .btn-del:active { transform: scale(0.96); }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #1d1309;
+      border: 1px solid rgba(244,230,201,0.1);
+      border-radius: 16px;
+      padding: 28px 24px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+    }
+    .modal-icon { font-size: 32px; margin-bottom: 12px; }
+    .modal-title { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+    .modal-body { font-size: 13px; color: rgba(244,230,201,0.55); margin-bottom: 22px; line-height: 1.5; }
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+    .btn-cancel { background: rgba(244,230,201,0.06); border: 1px solid rgba(244,230,201,0.12); color: rgba(244,230,201,0.6); border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .btn-cancel:hover { background: rgba(244,230,201,0.1); }
+    .btn-confirm-del { background: #b91c1c; border: none; color: #fff; border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .btn-confirm-del:hover { background: #991b1b; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a2e1b;
+      border: 1px solid rgba(43,83,46,0.6);
+      color: #7ec882;
+      border-radius: 12px;
+      padding: 12px 22px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 300;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* Duplicado */
+    .dup-badge {
+      display: inline-block;
+      background: rgba(234,179,8,0.15);
+      border: 1px solid rgba(234,179,8,0.4);
+      color: #facc15;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      white-space: nowrap;
+    }
+    tr.dup-row { background: rgba(234,179,8,0.04) !important; }
+    tr.dup-row td:first-child { border-left: 2px solid rgba(234,179,8,0.5); }
 
     .wa-link { color: var(--naranja-2); text-decoration: none; }
     .wa-link:hover { text-decoration: underline; }
@@ -323,6 +420,21 @@
   </style>
 </head>
 <body>
+
+<div class="toast" id="toast"></div>
+
+<!-- Modal confirmación borrado -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon">🗑️</div>
+    <div class="modal-title" id="modalTitle">¿Eliminar reserva?</div>
+    <div class="modal-body" id="modalBody">Esta acción no se puede deshacer.</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-confirm-del" id="btnConfirmDel">Eliminar</button>
+    </div>
+  </div>
+</div>
 
 <div class="header">
   <div class="brand">
@@ -387,6 +499,7 @@
             <th>Partido · Pronóstico</th>
             <th>Estado</th>
             <th>Check-in</th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="tbody">
@@ -412,11 +525,14 @@
 
   async function cargar() {
     try {
-      todas = await (await fetch('/api/reservas')).json();
+      const resp = await fetch('/api/reservas');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status} ${resp.statusText}`);
+      todas = await resp.json();
       filtrar();
-    } catch {
+    } catch (err) {
+      console.error('[Admin] Error en cargar():', err);
       document.getElementById('tbody').innerHTML =
-        '<tr><td colspan="10"><div class="empty"><div class="empty-icon">⚠️</div>Error cargando datos.</div></td></tr>';
+        `<tr><td colspan="10"><div class="empty"><div class="empty-icon">⚠️</div>Error cargando datos.<br><small style="opacity:.5;font-size:11px">${err.message}</small></div></td></tr>`;
     }
   }
 
@@ -444,6 +560,16 @@
       return;
     }
 
+    // Detectar duplicados: mismo WhatsApp + misma fecha + mismo partido
+    const dupKeys = new Set();
+    const dupIds  = new Set();
+    for (const r of lista) {
+      const key = `${r.whatsapp}|${r.fecha_reserva}|${r.equipo_a}|${r.equipo_b}`;
+      if (dupKeys.has(key)) dupIds.add(key);
+      dupKeys.add(key);
+    }
+    const isDup = r => dupIds.has(`${r.whatsapp}|${r.fecha_reserva}|${r.equipo_a}|${r.equipo_b}`);
+
     tbody.innerHTML = lista.map(r => {
       const waNum = r.whatsapp.replace(/\D/g, '');
 
@@ -460,10 +586,12 @@
         ? 'background:rgba(216,69,11,0.12);color:#ef783e;border:1px solid rgba(216,69,11,0.25);'
         : 'background:rgba(43,83,46,0.15);color:#7ec882;border:1px solid rgba(43,83,46,0.3);';
 
-      return `<tr>
+      const dup = isDup(r);
+
+      return `<tr${dup ? ' class="dup-row"' : ''}>
         <td class="id-cell">${r.id}</td>
         <td><span style="display:inline-block;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;${tipoClass}">${esc(r.tipo || '—')}</span></td>
-        <td style="font-weight:700;">${esc(r.nombre)}</td>
+        <td style="font-weight:700;">${esc(r.nombre)}${dup ? ' <span class="dup-badge">⚠ duplicado</span>' : ''}</td>
         <td><a class="wa-link" href="https://wa.me/${waNum}" target="_blank">${esc(r.whatsapp)}</a></td>
         <td>${fechaFmt}${r.hora_reserva ? ' · ' + r.hora_reserva : ''}</td>
         <td style="text-align:center;font-weight:800;">${r.cantidad_personas}</td>
@@ -473,8 +601,9 @@
             <span class="marcador">${r.gol_a} – ${r.gol_b}</span>
           </div>
         </td>
-        <td><span class="st ${r.estado === 'confirmado' ? 'st-c' : 'st-p'}">${r.estado}</span></td>
+        <td>${estadoCell(r)}</td>
         <td>${ciBtn}</td>
+        <td><button class="btn-del" onclick="confirmarEliminar(${r.id}, '${esc(r.nombre).replace(/'/g,"\\'")}')">🗑️</button></td>
       </tr>`;
     }).join('');
   }
@@ -500,6 +629,82 @@
       btn.textContent = 'Marcar asistencia';
     }
   }
+
+  function estadoCell(r) {
+    const labels = { pendiente: 'pendiente', confirmada: 'confirmada', cancelada: 'cancelada', confirmado: 'confirmado' };
+    const clases = { pendiente: 'st-p', confirmada: 'st-c', cancelada: 'st-ca', confirmado: 'st-c' };
+    const cl  = clases[r.estado]  || 'st-p';
+    const lbl = labels[r.estado]  || r.estado;
+    const btn = r.estado === 'pendiente'
+      ? `<button class="btn-confirmar" onclick="confirmar(${r.id},this)">✓ Confirmar</button>`
+      : '';
+    return `<span class="st ${cl}">${lbl}</span>${btn}`;
+  }
+
+  async function confirmar(id, btn) {
+    btn.disabled = true;
+    btn.textContent = '...';
+    try {
+      const resp = await fetch(`/api/reservas/${id}/estado`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estado: 'confirmada' })
+      });
+      if (!resp.ok) throw new Error();
+      const r = todas.find(x => x.id === id);
+      if (r) r.estado = 'confirmada';
+      filtrar();
+      mostrarToast('✅ Reserva confirmada');
+    } catch {
+      btn.disabled = false;
+      btn.textContent = '✓ Confirmar';
+    }
+  }
+
+  let _pendingDeleteId = null;
+
+  function confirmarEliminar(id, nombre) {
+    _pendingDeleteId = id;
+    document.getElementById('modalTitle').textContent = `¿Eliminar la reserva de ${nombre}?`;
+    document.getElementById('modalBody').textContent  = 'Esta acción no se puede deshacer.';
+    document.getElementById('btnConfirmDel').onclick  = ejecutarEliminar;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function cerrarModal() {
+    _pendingDeleteId = null;
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  async function ejecutarEliminar() {
+    if (!_pendingDeleteId) return;
+    const id = _pendingDeleteId;
+    cerrarModal();
+    try {
+      const r = await fetch(`/api/reservas/${id}`, { method: 'DELETE' });
+      if (!r.ok) throw new Error();
+      todas = todas.filter(x => x.id !== id);
+      filtrar();
+      cargarStats();
+      mostrarToast('✅ Reserva eliminada correctamente');
+    } catch {
+      mostrarToast('⚠️ Error al eliminar. Intenta de nuevo.');
+    }
+  }
+
+  let _toastTimer = null;
+  function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Cerrar modal al hacer clic fuera
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) cerrarModal();
+  });
 
   function exp(t) { window.open(`/api/export/${t}`, '_blank'); }
 
